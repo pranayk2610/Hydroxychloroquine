@@ -3,9 +3,31 @@
     <head>
         <meta charset="utf-8">
         <title></title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link href="login.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     </head>
     <body>
-        <h1>you can login</h1>
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+                <!-- UGA Logo -->
+                <div class="fadeIn first">
+                    <img src="uga_logo.png" class="img-fluid" id="icon" alt="UGA Arches Logo"  />
+                </div>
+                <!-- Login Form -->
+                <form>
+                    <input type="text" id="myId" class="fadeIn second" name="myId" placeholder="UGA MyId">
+                    <input type="password" id="password" class="fadeIn third"name="password" placeholder="password">
+                    <input type="submit" class="fadeIn fourth" value="Log In">
+                </form>
+
+                <!-- Forgot Password Section -->
+                <div id="formFooter">
+                    <a class="underlineHover" href="forgotPassword.html">Forgot your Password?</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
