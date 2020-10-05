@@ -2,9 +2,36 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title></title>
+        <link href="login.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <title>Create An Account</title>
     </head>
     <body>
-        Sign up for your account
+    <div class="form-gap"></div>
+       <div class="center-screen" id="wrapper fadeInDown">
+            <div id="formContent">
+                <!-- UGA Logo -->
+                <div class="fadeIn first">
+                    <img src="uga_logo.png" class="img-fluid" id="icon" alt="UGA Arches Logo"  />
+                </div>
+                <h2 class="fadeIn first">Create An Account</h2>
+                <!-- Signup Form -->
+                <form>
+                    <input type="text" id="firstName" class="fadeIn second" name="myId" placeholder="First Name">
+                    <input type="text" id="lastName" class="fadeIn second" name="myId" placeholder="Last Name">
+                    <input type="text" id="myId" class="fadeIn second" name="myId" placeholder="UGA MyId">
+                    <input id="email" name="email" class="fadeIn third" placeholder="UGA Email" class="form-control"  type="email">
+                    <input type="password" id="password" class="fadeIn third" name="login" placeholder="Create Password">
+                    <input type="password" id="password" class="fadeIn third" name="login" placeholder="Re-Enter Password">
+                    <input type="submit" class="fadeIn fourth" value="Create Account">
+                </form>
+                <!-- Reference Login -->
+                <div id="formFooter">
+                    <a class="underlineHover" href="login.html">Already have an account?</a>
+                </div>
+            </div>
+       </div>
     </body>
 </html>
