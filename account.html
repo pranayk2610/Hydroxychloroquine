@@ -29,10 +29,52 @@
             </ul>
         </nav>
         <h1>My Account</h1>
-        <div class="funkyradio">
-            <div class="funkyradio-success">
-                <input type="checkbox" name="testCheckbox" id="checkbox1" class="funkyradio-success"/>
-                <label for="checkbox1">Boyd Graduate Research Center</label>
+        <!-- User's personal information -->
+        <h2>Personal Information</h2>
+        <div class="row">
+            <div class="col-md-1">
+                <ul class="list-group">
+                    <li class="list-group-item">Name</li>
+                    <li class="list-group-item">Email</li>
+                    <li class="list-group-item">UGA ID</li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <ul class="list-group">
+                    <li class="list-group-item">Nathan Cooley</li>
+                    <li class="list-group-item">nrc10711@uga.edu</li>
+                    <li class="list-group-item">nrc10711</li>
+                </ul>
             </div>
         </div>
+        <!-- Buildings the user selected -->
+        <!-- This is mostly hardcoded for the purpose of the UI demo. Our Actual website will probably need a list with its own scrollbar. -->      
+        <div class="col-md-3">
+            <h2>Selected Buildings</h2>
+            <div class="funkyradio">
+                <div class="funkyradio-success">
+                        <input type="checkbox" name="checkbox" id="checkbox1" class="funkyradio-success" checked/>
+                        <label for="checkbox1">Boyd Graduate Research Center</label>
+                    </div>
+                    <div class="funkyradio-success">
+                        <input type="checkbox" name="checkbox" id="checkbox2" class="funkyradio-success"/>
+                        <label for="checkbox2">Chemistry</label>
+                    </div>
+
+                    <div class="funkyradio-success">
+                        <input type="checkbox" name="checkbox" id="checkbox4" class="funkyradio-success" checked/>
+                        <label for="checkbox4">Tate Student Center</label>
+                    </div>
+                    <div class="funkyradio-success">
+                        <input type="checkbox" name="checkbox" id="checkbox5" class="funkyradio-success"/>
+                        <label for="checkbox5">Miller Learning Center</label>
+                    </div>
+                    <div class="funkyradio-success">
+                        <input type="checkbox" name="checkbox" id="checkbox6" class="funkyradio-success"/>
+                        <label for="checkbox6">UGA Bookstore</label>
+                    </div>
+                    <input type="submit" value="update selection">
+            </div>
+        </div>
+        <div class="form-gap"></div>" 
 </html>
