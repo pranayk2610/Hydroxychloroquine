@@ -4,10 +4,11 @@
         <meta charset="utf-8">
         <title>My Account</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-        <link rel="stylesheet" href="login.css" />
+        <link rel="stylesheet" href="account.css" />
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="reportTest.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #bb1231;">
@@ -28,53 +29,431 @@
                 </li>
             </ul>
         </nav>
-        <h1>My Account</h1>
-        <!-- User's personal information -->
-        <h2>Personal Information</h2>
-        <div class="row">
-            <div class="col-md-1">
-                <ul class="list-group">
-                    <li class="list-group-item">Name</li>
-                    <li class="list-group-item">Email</li>
-                    <li class="list-group-item">UGA ID</li>
-                </ul>
-            </div>
-            <div class="col-md-2">
-                <ul class="list-group">
-                    <li class="list-group-item">Nathan Cooley</li>
-                    <li class="list-group-item">nrc10711@uga.edu</li>
-                    <li class="list-group-item">nrc10711</li>
-                </ul>
-            </div>
-        </div>
-        <!-- Buildings the user selected -->
-        <!-- This is mostly hardcoded for the purpose of the UI demo. Our Actual website will probably need a list with its own scrollbar. -->      
-        <div class="col-md-3">
-            <h2>Selected Buildings</h2>
-            <div class="funkyradio">
-                <div class="funkyradio-success">
-                        <input type="checkbox" name="checkbox" id="checkbox1" class="funkyradio-success" checked/>
-                        <label for="checkbox1">Boyd Graduate Research Center</label>
-                    </div>
-                    <div class="funkyradio-success">
-                        <input type="checkbox" name="checkbox" id="checkbox2" class="funkyradio-success"/>
-                        <label for="checkbox2">Chemistry</label>
-                    </div>
 
-                    <div class="funkyradio-success">
-                        <input type="checkbox" name="checkbox" id="checkbox4" class="funkyradio-success" checked/>
-                        <label for="checkbox4">Tate Student Center</label>
+        <div class="container" id="accountInfo">
+            <div class="col justify-content-center">
+                <h1>My Account</h1>
+                <!-- User's personal information -->
+                <h2>Personal Information</h2>
+                <div class="row">
+                    <div class="col-md-2">
+                        <ul class="list-group">
+                            <li class="list-group-item">Name</li>
+                            <li class="list-group-item">Email</li>
+                            <li class="list-group-item">UGA ID</li>
+                        </ul>
                     </div>
-                    <div class="funkyradio-success">
-                        <input type="checkbox" name="checkbox" id="checkbox5" class="funkyradio-success"/>
-                        <label for="checkbox5">Miller Learning Center</label>
+                    <div class="col-md-3">
+                        <ul class="list-group">
+                            <li class="list-group-item">Nathan Cooley</li>
+                            <li class="list-group-item">nrc10711@uga.edu</li>
+                            <li class="list-group-item">nrc10711</li>
+                        </ul>
                     </div>
-                    <div class="funkyradio-success">
-                        <input type="checkbox" name="checkbox" id="checkbox6" class="funkyradio-success"/>
-                        <label for="checkbox6">UGA Bookstore</label>
+                </div>
+                <div class="form-group col top">
+                    <p>Select which buildings and times you would like to be notified for potential covid exposure</p>
+                    <button type="button" id="addButton1">Add a building</button>
+
+                    <div class="form-group" id="building1">
+                        <label for="buildingSelect1">Select the building</label>
+                        <select class="custom-select" id="buildingSelect1">
+                            <option selected>Choose...</option>
+                            <option value="1">Boyd</option>
+                            <option value="2">MLC</option>
+                            <option value="3">Bolton</option>
+                            <option value="4">Chemistry</option>
+                            <option value="5">Ecology</option>
+                            <option value="6">Physics</option>
+                            <option value="6">Plant Sciences</option>
+                            <option value="7">SLC</option>
+                            <option value="8">Creswell</option>
+                            <option value="9">Rutherford</option>
+                            <option value="10">Ramsey</option>
+                            <option value="11">Snelling</option>
+                            <option value="12">Myers</option>
+                            <option value="13">Connor Hall</option>
+                            <option value="14">Tate</option>
+                        </select>
+                        <label for="startTime1">From:</label>
+                        <select class="custom-select" id="startTime1">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                        <label for="endTime1">To:</label>
+                        <select class="custom-select" id="endTime1">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
                     </div>
-                    <input type="submit" value="update selection">
+                    <button type="button" id="addButton2">Add a building</button>
+
+                    <div class="form-group" id="building2">
+                        <label for="buildingSelect2">Select the building</label>
+                        <select class="custom-select" id="buildingSelect2">
+                            <option selected>Choose...</option>
+                            <option value="1">Boyd</option>
+                            <option value="2">MLC</option>
+                            <option value="3">Bolton</option>
+                            <option value="4">Chemistry</option>
+                            <option value="5">Ecology</option>
+                            <option value="6">Physics</option>
+                            <option value="6">Plant Sciences</option>
+                            <option value="7">SLC</option>
+                            <option value="8">Creswell</option>
+                            <option value="9">Rutherford</option>
+                            <option value="10">Ramsey</option>
+                            <option value="11">Snelling</option>
+                            <option value="12">Myers</option>
+                            <option value="13">Connor Hall</option>
+                            <option value="14">Tate</option>
+                        </select>
+                        <label for="startTime2">From:</label>
+                        <select class="custom-select" id="startTime2">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                        <label for="endTime2">To:</label>
+                        <select class="custom-select" id="endTime2">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addButton3">Add a building</button>
+
+                    <div class="form-group" id="building3">
+                        <label for="buildingSelect3">Select the building</label>
+                        <select class="custom-select" id="buildingSelect3">
+                            <option selected>Choose...</option>
+                            <option value="1">Boyd</option>
+                            <option value="2">MLC</option>
+                            <option value="3">Bolton</option>
+                            <option value="4">Chemistry</option>
+                            <option value="5">Ecology</option>
+                            <option value="6">Physics</option>
+                            <option value="6">Plant Sciences</option>
+                            <option value="7">SLC</option>
+                            <option value="8">Creswell</option>
+                            <option value="9">Rutherford</option>
+                            <option value="10">Ramsey</option>
+                            <option value="11">Snelling</option>
+                            <option value="12">Myers</option>
+                            <option value="13">Connor Hall</option>
+                            <option value="14">Tate</option>
+                        </select>
+                        <label for="startTime3">From:</label>
+                        <select class="custom-select" id="startTime3">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                        <label for="endTime3">To:</label>
+                        <select class="custom-select" id="endTime3">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addButton4">Add a building</button>
+
+                    <div class="form-group" id="building4">
+                        <label for="buildingSelect4">Select the building</label>
+                        <select class="custom-select" id="buildingSelect4">
+                            <option selected>Choose...</option>
+                            <option value="1">Boyd</option>
+                            <option value="2">MLC</option>
+                            <option value="3">Bolton</option>
+                            <option value="4">Chemistry</option>
+                            <option value="5">Ecology</option>
+                            <option value="6">Physics</option>
+                            <option value="6">Plant Sciences</option>
+                            <option value="7">SLC</option>
+                            <option value="8">Creswell</option>
+                            <option value="9">Rutherford</option>
+                            <option value="10">Ramsey</option>
+                            <option value="11">Snelling</option>
+                            <option value="12">Myers</option>
+                            <option value="13">Connor Hall</option>
+                            <option value="14">Tate</option>
+                        </select>
+                        <label for="startTime4">From:</label>
+                        <select class="custom-select" id="startTime4">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                        <label for="endTime4">To:</label>
+                        <select class="custom-select" id="endTime4">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addButton5">Add a building</button>
+
+                    <div class="form-group" id="building5">
+                        <label for="buildingSelect5">Select the building</label>
+                        <select class="custom-select" id="buildingSelect5">
+                            <option selected>Choose...</option>
+                            <option value="1">Boyd</option>
+                            <option value="2">MLC</option>
+                            <option value="3">Bolton</option>
+                            <option value="4">Chemistry</option>
+                            <option value="5">Ecology</option>
+                            <option value="6">Physics</option>
+                            <option value="6">Plant Sciences</option>
+                            <option value="7">SLC</option>
+                            <option value="8">Creswell</option>
+                            <option value="9">Rutherford</option>
+                            <option value="10">Ramsey</option>
+                            <option value="11">Snelling</option>
+                            <option value="12">Myers</option>
+                            <option value="13">Connor Hall</option>
+                            <option value="14">Tate</option>
+                        </select>
+                        <label for="startTime5">From:</label>
+                        <select class="custom-select" id="startTime5">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                        <label for="endTime5">To:</label>
+                        <select class="custom-select" id="endTime5">
+                            <option selected>Choose...</option>
+                            <option value="1">12:00AM</option>
+                            <option value="2">1:00AM</option>
+                            <option value="3">2:00AM</option>
+                            <option value="4">3:00AM</option>
+                            <option value="5">4:00AM</option>
+                            <option value="6">5:00AM</option>
+                            <option value="6">6:00AM</option>
+                            <option value="7">7:00AM</option>
+                            <option value="8">8:00AM</option>
+                            <option value="9">9:00AM</option>
+                            <option value="10">10:00AM</option>
+                            <option value="11">11:00AM</option>
+                            <option value="12">12:00PM</option>
+                            <option value="13">1:00PM</option>
+                            <option value="14">2:00PM</option>
+                            <option value="14">3:00PM</option>
+                            <option value="14">4:00PM</option>
+                            <option value="14">5:00PM</option>
+                            <option value="14">6:00PM</option>
+                            <option value="14">7:00PM</option>
+                            <option value="14">8:00PM</option>
+                            <option value="14">9:00PM</option>
+                            <option value="14">10:00PM</option>
+                            <option value="14">11:00PM</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-gap"></div>" 
+
+        <!-- Buildings the user selected -->
+        <!-- This is mostly hardcoded for the purpose of the UI demo. Our Actual website will probably need a list with its own scrollbar. -->
+
+        <div class="form-gap"></div>"
 </html>
