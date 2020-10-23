@@ -1,0 +1,15 @@
+{% extends "Hydroxychloroquine/test_base.html" %}
+{% block content %}
+    {% for test_post in test_posts %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ test_post.author }}</a>
+              <small class="text-muted">{{ test_post.date_posted }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ test_post.title }}</a></h2>
+            <p class="article-content">{{ test_post.content }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
