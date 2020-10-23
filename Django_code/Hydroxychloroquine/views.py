@@ -5,7 +5,6 @@ from .testingVars import test_buildings,test_reports
 
 # for display purposes
 max_num_excursions=5
-max_num_excursions_counter=range(max_num_excursions)
 
 #list used in displaying buildings in account.html and reportTest.html
 # (invoked in a call to selectBuildings.html)
@@ -48,7 +47,7 @@ def account(request):
         'title':'account',
         'buildings':test_buildings,
         'times':display_times,
-        'max_num_buildings_counter':range(1,1+max_num_buildings),
+        'max_num_excursions_counter':range(1,1+max_num_excursions),
     }
     return render(request, 'Hydroxychloroquine/account.html', context)
 
@@ -57,7 +56,7 @@ def reportTest(request):
         'title':'reportTest',
         'buildings':test_buildings,
         'times':display_times,
-        'max_num_buildings_counter':range(1,1+max_num_buildings),
+        'max_num_excursions_counter':range(1,1+max_num_excursions),
     }
     return render(request, 'Hydroxychloroquine/reportTest.html', context)
 
