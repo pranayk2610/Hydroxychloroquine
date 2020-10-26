@@ -1,0 +1,71 @@
+{% extends "Hydroxychloroquine/base.html" %}
+{% load static %}
+{% block style %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha512-2JBCbWoMJPH+Uj7Wq5OLub8E5edWHlTM4ar/YJkZh3plwB2INhhOC3eDoqHm1Za/ZOSksrLlURLoyXVdfQXqwg==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha512-PMjWzHVtwxdq7m7GIxBot5vdxUY+5aKP9wpKtvnNBZrVv1srI8tU6xvFMzG8crLNcMj/8Xl/WWmo/oAP/40p1g==" crossorigin="anonymous" />-----
+  <link rel="stylesheet" href="{% static 'Hydroxychloroquine/reportTest.css' %}">
+  <script src="{% static 'Hydroxychloroquine/reportTest.js' %}"></script>
+{% endblock style %}
+{% block content %}
+  <div class="container" id="reportTestForm">
+      <div class="col justify-content-center">
+          <form>
+              <div class="form-group top">
+                  <h3>Report your COVID-19 test result</h3>
+                  <p>
+                      This page is for you to report your covid test result. If you report a positive test,
+                      a vague version of the location data you post for the test will be posted on the main page
+                      of this site so that people can see where they are at risk of exposure. People who have signed up
+                      for notifications for buildings you are in will also be notified that someone who was in those
+                      buildings tested positive. All data will be anonymous. If you do not wish to report what buildings
+                      you were in, you do not have to.
+                  </p>
+              </div>
+              <div class="form-group top">
+                  <label for="resultChecks">Was your COVID-19 test result positive or negative?</label>
+                  <div class="form-group col">
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="testResultRadio" id="testResultRadio1" value="positive">
+                          <label class="form-check-label" for="testResultRadios1">Positive</label>
+                      </div>
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="testResultRadio" id="testResultRadio2" value="negative">
+                          <label class="form-check-label" for="testResultRadios2">Negative</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group top">
+                  <label for="dateoftest">On what date did the test occur?</label>
+                  <input type="date" data-provide="datepicker" id="dateoftest" aria-describedby="dateClarification" class="form-control">
+                  <small id="dateClarification" class="form-text text-muted">This should be the date the test was administered on, not when you recieved the result.</small>
+              </div>
+              <div class="form-group top">
+                  <label for="resultChecks">Which category do you fall in?</label>
+                  <div class="form-group col">
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="categoryRadio" id="categoryRadio1" value="student">
+                          <label class="form-check-label" for="categoryRadios1">Student</label>
+                      </div>
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="categoryRadio" id="categoryRadio2" value="faculty">
+                          <label class="form-check-label" for="categoryRadios2">Faculty</label>
+                      </div>
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="categoryRadio" id="categoryRadio3" value="staff">
+                          <label class="form-check-label" for="categoryRadios3">Staff</label>
+                      </div>
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="categoryRadio" id="categoryRadio4" value="other">
+                          <label class="form-check-label" for="categoryRadios4">Other member of the Athens community</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group col top">
+                  <p>Select which buildings you have been in during the last 3 days and times you were there</p>
+                {% include "Hydroxychloroquine/selectBuildings.html" %}
+              </div>
+          </form>
+      </div>
+  </div>
+{% endblock content %}

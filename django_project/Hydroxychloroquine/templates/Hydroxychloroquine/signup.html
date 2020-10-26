@@ -1,0 +1,24 @@
+{% extends "Hydroxychloroquine/dropdown_base.html" %}
+{% load static %}
+{% block content %}
+<!-- Signup Form -->
+<h2 class="fadeIn first">Create An Account</h2>
+<form method="POST">
+  {% csrf_token %}
+  <!--
+  <input type="text" id="firstName" class="fadeIn second" name="myId" placeholder="First Name">
+  <input type="text" id="lastName" class="fadeIn second" name="myId" placeholder="Last Name">
+  <input id="email" name="email" class="fadeIn third" placeholder="UGA Email" class="form-control" type="email">
+  <input type="password" id="password" class="fadeIn third" name="login" placeholder="Create Password">
+  <input type="password" id="password" class="fadeIn third" name="login" placeholder="Re-Enter Password">
+  -->
+  {{ form }}
+
+  <input type="submit" class="fadeIn fourth" value="Create Account">
+</form>
+
+<!-- Reference Login -->
+<div id="formFooter">
+  <a class="underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Already have an account?</a>
+</div>
+{% endblock content %}

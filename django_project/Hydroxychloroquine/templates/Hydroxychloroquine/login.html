@@ -1,0 +1,19 @@
+{% extends "Hydroxychloroquine/dropdown_base.html" %}
+{% load static %}
+{% block content %}
+<!-- Login Form -->
+<form method="POST">
+  {% csrf_token %}
+  <!--
+  <input type="text" id="myId" class="fadeIn second" name="myId" placeholder="UGA MyId">
+  <input type="password" id="password" class="fadeIn third" name="login" placeholder="Password">
+  -->
+  {{form}}
+  <input type="submit" class="fadeIn fourth" value="Log In">
+</form>
+
+<!-- Forgot Password Section -->
+<div id="formFooter">
+  <a class="underlineHover" href="{% url 'Hydroxychloroquine-forgotPassword' %}">Forgot your Password?</a>
+</div>
+{% endblock content %}
