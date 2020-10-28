@@ -6,6 +6,10 @@ from django.utils.translation import gettext_lazy as _
 
 from .managers import CustomUserManager
 
+class Role(models.Model):
+    role_id = models.IntegerField(primary_key = True)
+    role_name = models.CharField(max_length = 128)
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     class UserType(models.TextChoices):
@@ -26,6 +30,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length = 3,
         choices = UserType.choices,
         default = 'O')
+
+    roles = models.ManyToManyField(Role)
+
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
