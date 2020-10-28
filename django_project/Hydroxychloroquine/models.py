@@ -20,3 +20,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Report(models.Model):
+    date_of_test = models.DateTimeField('')
+    date_last_on_campus = models.DateTimeField('')
+    user_id = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return "%s %s %s" % (self.date_of_test, self.date_last_on_campus, self.user_id)
