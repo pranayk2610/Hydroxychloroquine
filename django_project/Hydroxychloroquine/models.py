@@ -8,11 +8,24 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    display_name = models.CharField(max_length = 128)
+    class UserType(models.TextChoices):
+        STUDENT : 'STU' 
+        STAFF : 'STA'
+        OTHER : 'O'
+
+    display_name = models.CharField(max_length = 128, default = 'John Doe')
     email = models.EmailField(_("email address"), unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
+    first_login = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
+
+    #add UserType to this
+    user_type = models.CharField(
+        max_length = 3,
+        choices = UserType.choices,
+        default = 'O')
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -20,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.display_name
 
 
 class Report(models.Model):
