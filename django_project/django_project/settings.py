@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_email_verification",
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,21 @@ AUTH_USER_MODEL = "Hydroxychloroquine.CustomUser"
 
 LOGIN_REDIRECT_URL = "Hydroxychloroquine-home"
 LOGIN_URL = "Hydroxychloroquine-login"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "hydroxy.app@gmail.com"
+EMAIL_HOST_PASSWORD = "chl0r0qu1ne"
+
+# Needed for django_email_verification
+EMAIL_SERVER = "smtp.gmail.com"
+EMAIL_ADDRESS = "hydroxy.app@gmail.com"
+EMAIL_PASSWORD = "chl0r0qu1ne"
+EMAIL_FROM_ADDRESS = "hydroxy.app@gmail.com"
+EMAIL_ACTIVE_FIELD = "is_active"
+EMAIL_MAIL_SUBJECT = "Confirm Account"
+EMAIL_MAIL_HTML = "Hydroxychloroquine/mail_body.html"
+EMAIL_PAGE_TEMPLATE = "Hydroxychloroquine/confirm_template.html"
+EMAIL_PAGE_DOMAIN = "http://127.0.0.1:8000/"

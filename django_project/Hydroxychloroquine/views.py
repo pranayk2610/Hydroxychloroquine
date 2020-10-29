@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django_email_verification import sendConfirm
 
 # from django.http import HttpResponse
 from .testingVars import test_buildings, test_reports
@@ -78,8 +79,10 @@ def signup(request):
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            print("yes")
-            form.save()
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            sendConfirm(user)
             return redirect("Hydroxychloroquine-login")
     else:
         form = UserRegistrationForm()
@@ -91,8 +94,3 @@ def forgotPassword(request):
         "title": "forgotPassword",
     }
     return render(request, "Hydroxychloroquine/forgotPassword.html", context)
-
-
-# Obsolete
-def index(request):
-    return render(request, "Hydroxychloroquine/index.html")
