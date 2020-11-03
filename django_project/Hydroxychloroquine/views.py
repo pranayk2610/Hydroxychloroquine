@@ -49,12 +49,21 @@ def home(request):
 
 @login_required
 def account(request):
+    if request.method == "POST":
+        form = forms.CustomUserChangeForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return redirect("Hydroxychloroquine-account")
+    else:
+        form = forms.CustomUserChangeForm()
     context = {
         "title": "account",
         "buildings": test_buildings,
         "times": display_times,
         "max_num_excursions_counter": range(1, 1 + max_num_excursions),
         "loop_max": max_num_excursions,
+        "form": form,
     }
     return render(request, "Hydroxychloroquine/account.html", context)
 
