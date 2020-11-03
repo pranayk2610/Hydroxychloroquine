@@ -17,17 +17,42 @@
                 <ul class="list-group">
                     <li class="list-group-item">Name</li>
                     <li class="list-group-item">Email</li>
-                    <li class="list-group-item">UGA ID</li>
+                    <!-- <li class="list-group-item">UGA ID</li> -->
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul class="list-group">
-                    <li class="list-group-item">{{user.display_name}}</li>
-                    <li class="list-group-item">{{user.email}}</li>
-                    <li class="list-group-item">nrc10711</li>
+                    <li class="list-group-item">{{request.user.display_name}}</li>
+                    <li class="list-group-item">{{request.user.email}}</li>
+                    <!-- <li class="list-group-item">nrc10711</li> -->
                 </ul>
             </div>
         </div>
+
+        <!-- for debugging -->
+        <!-- <div class="row">
+            <div class="col-md-2">
+                <ul class="list-group">
+                    <li class="list-group-item">is_staff</li>
+                    <li class="list-group-item">is_active</li>
+                    <li class="list-group-item">is_verified</li>
+                    <li class="list-group-item">first_login</li>
+                    <li class="list-group-item">date_joined</li>
+                    <li class="list-group-item">user_type</li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="list-group">
+                    <li class="list-group-item">{{request.user.is_staff}}</li>
+                    <li class="list-group-item">{{request.user.is_active}}</li>
+                    <li class="list-group-item">{{request.user.is_verified}}</li>
+                    <li class="list-group-item">{{request.user.first_login}}</li>
+                    <li class="list-group-item">{{request.user.date_joined}}</li>
+                    <li class="list-group-item">{{request.user.user_type}}</li>
+                </ul>
+            </div>
+        </div> -->
+        <!-- end debugging -->
         <div class="form-group col top">
             <p>Select which buildings and times you would like to be notified for potential covid exposure</p>
             {% include "Hydroxychloroquine/selectBuildings.html" %}
