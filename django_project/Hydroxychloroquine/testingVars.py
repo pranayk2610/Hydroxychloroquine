@@ -35,6 +35,7 @@ class test_report:
         self.Position=Position
         self.DateLastOnCampus=DateLastOnCampus
         self.BuildingsImpacted=BuildingsImpacted
+
 test_reports=[
     test_report('October 4, 2020','Student','October 2, 2020','Boyd Graduate Research Building, Science Library, Conner Hall, and Miller Learning Center'),
     test_report('October 5, 2020','Student','October 3, 2020','Boyd Graduate Research Building, Science Library, and Miller Learning Center'),
