@@ -54,6 +54,7 @@ def account(request):
         "buildings": test_buildings,
         "times": display_times,
         "max_num_excursions_counter": range(1, 1 + max_num_excursions),
+        "loop_max": max_num_excursions,
     }
     return render(request, "Hydroxychloroquine/account.html", context)
 
@@ -64,6 +65,7 @@ def reportTest(request):
         "buildings": test_buildings,
         "times": display_times,
         "max_num_excursions_counter": range(1, 1 + max_num_excursions),
+        "loop_max": max_num_excursions,
     }
     return render(request, "Hydroxychloroquine/reportTest.html", context)
 
