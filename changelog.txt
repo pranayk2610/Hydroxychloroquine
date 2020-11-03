@@ -1,0 +1,9 @@
+  11/2/20
+Added rememberMe checkbox and functionality (subclassed AuthenticationForm)
+Cleaned up urls.py, moving relevent sections to views.py
+The views from django.contrib.auth expressed in a more controlable way
+added submit buttons to reportTest.html and account.html
+Bastardized the formatting in reportTest.html but it can now return the input upto the building select. 
+
+
+

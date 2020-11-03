@@ -12,7 +12,7 @@
             <option selected>Choose...</option>
             <!-- Loop through building names -->
             {% for building in buildings %}
-                <option value="{{ forloop.counter }}">{{ building.name }}</option>
+              <option value="{{ forloop.counter }}">{{ building.name }}</option>
             {% endfor %}
         </select>
         <label for="startTime{{ i }}">From:</label>
@@ -20,7 +20,7 @@
             <option selected>Choose...</option>
             <!-- Loop through all times -->
             {% for time in times %}
-                <option value="{{ forloop.counter }}">{{ time }}</option>
+              <option value="{{ forloop.counter }}">{{ time }}</option>
             {% endfor %}
         </select>
         <label for="endTime{{ i }}">To:</label>
@@ -28,8 +28,8 @@
             <option selected>Choose...</option>
             <!-- Loop through all times -->
             {% for time in times %}
-                <option value="{{ forloop.counter }}">{{ time }}</option>
-            {% endfor %}
+              <option value="{{ forloop.counter }}">{{ time }}</option>
+            {% endfor %}z
         </select>
     </div>
 
@@ -45,4 +45,5 @@
             $("#addButton{{ loop_max|sub:i|sub:1 }}").show();
         });
     </script>
+  <
 {% endfor %}
