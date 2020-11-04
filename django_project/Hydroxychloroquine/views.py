@@ -132,17 +132,17 @@ def login(request, *args, **kwargs):
             request.session.set_expiry(0)
 
     # debug print to terminal start
-    if request.method == "POST":
-        if not request.POST.get("RememberMe", None):
-            print("RememberMe was unchecked")
-        else:
-            print("RememberMe was checked")
-        print(request.POST.get("RememberMe"))
-        print("Login expires in {} seconds".format(request.session.get_expiry_age()))
-        print(
-            "Login expires at browser close:",
-            request.session.get_expire_at_browser_close(),
-        )
+    # if request.method == "POST":
+    #     if not request.POST.get("RememberMe", None):
+    #         print("RememberMe was unchecked")
+    #     else:
+    #         print("RememberMe was checked")
+    #     print(request.POST.get("RememberMe"))
+    #     print("Login expires in {} seconds".format(request.session.get_expiry_age()))
+    #     print(
+    #         "Login expires at browser close:",
+    #         request.session.get_expire_at_browser_close(),
+    #     )
     # debug print to terminal end
 
     customRender = auth_views.LoginView.as_view(
