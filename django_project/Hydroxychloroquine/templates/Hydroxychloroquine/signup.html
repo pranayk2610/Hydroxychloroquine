@@ -3,6 +3,7 @@
 {% block content %}
 <!-- Signup Form -->
 <h2 class="fadeIn first">Create An Account</h2>
+
 <form method="POST">
   {% csrf_token %}
   <!--
@@ -14,16 +15,29 @@
   -->
   {%for field in form %}
   <!-- adds CSS to field labling  -->
-    {% if field.label_tag %} 
+    {% if field.label_tag %}
       <h2 class="fadeIn second"> {{ field.label_tag }} </h2>
     {% endif %}
     {{ field }}
   {% endfor %}
+
+   {% for message in messages %}
+      <div class="alert alert-success">
+          <a class="close" href="#" data-dismiss="alert">×</a>
+          {{ message }}
+      </div>
+  {% endfor %}
+  
   <input type="submit" class="fadeIn fourth" value="Create Account">
 </form>
-
+  {% if form.errors %}
+      <!-- <p>username or password not correct</p> -->
+  {% endif %}
 <!-- Reference Login -->
 <div id="formFooter">
   <a class="underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Already have an account?</a>
+</div>
+<div id="formFooter">
+  <a class="underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
 </div>
 {% endblock content %}
