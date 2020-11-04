@@ -18,15 +18,20 @@
         </button>
       </div>
       <div class="modal-body">
-        {{form}}
+        <form method="POST">
+          {% csrf_token %}
+          {{form}}
+          <input type="submit" value="Save Changes">
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <!--<button type="submit" class="btn btn-primary">Save changes</button>-->
       </div>
     </div>
   </div>
 </div>
+
 <div class="container" id="accountInfo">
   <div class="col justify-content-center">
     <h1>My Account</h1>
@@ -51,7 +56,11 @@
     <div class="row row-edit">
       <button type="button" id="editButton" class="btn btn-secondary" data-toggle="modal" data-target="#editModal"
         style="margin: 15px;">Edit Account</button>
+      <a href="{% url 'password_change' %}" id="editButton" class="btn btn-secondary" style="margin: 15px;"> Change
+        Password</a>
     </div>
+
+
     <!-- for debugging -->
     <!-- <div class="row">
             <div class="col-md-2">
