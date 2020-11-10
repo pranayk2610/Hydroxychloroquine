@@ -6,4 +6,15 @@ added submit buttons to reportTest.html and account.html
 Bastardized the formatting in reportTest.html but it can now return the input upto the building select. 
 
 
+  11/9/20
+Used a "form factory" to allow for collecting an indefinite number of excursions.
+The input from forms is now stored in the database when submitted.
+Account and Reporttest pages correctly use the front end's design.
+In the database, The folowing migrations:
+    - Alter field display_name on customuser
+    - Alter field end_time on excursion
+    - Alter field report_id on excursion
+    - Alter field start_time on excursion
+    - Alter field date_last_on_campus on report
+    - Alter field date_of_test on report
 

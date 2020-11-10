@@ -2,47 +2,51 @@
 {% load mathfilters %}
 <!-- used in account.html and reportTest.html -->
 
-<!-- Can add upto max_num_excursions_counter times -->
-{% for i in max_num_excursions_counter %}
-
+{{ formset_SelectBuilding.management_form }}
+{% for form in formset_SelectBuilding %}
+  {% with i=forloop.counter0 %}
     <button type="button" id="addButton{{ i }}" class="btn btn-secondary">Add a building</button>
-    <div class="form-group" id="building{{ i }}">
-        <label for="buildingSelect{{ i }}">Select the building</label>
-        <select class="custom-select" id="buildingSelect{{ i }}">
+    <div class="form-group" id="excursion{{ i }}">
+
+        <label for="id_excursions-{{ i }}-building_id">Select the building</label>
+        <select name="excursions-{{ i }}-building_id" class="custom-select" id="id_excursions-{{ i }}-building_id">
             <option selected>Choose...</option>
-            <!-- Loop through building names -->
-            {% for building in buildings %}
-              <option value="{{ forloop.counter }}">{{ building.name }}</option>
+            {% for building in form.building_id.field.choices %}
+                <option value="{{ building.0 }}" {% if forloop.counter == 2 %} selected {% endif %}>{{ building.1 }}</option>
             {% endfor %}
         </select>
-        <label for="startTime{{ i }}">From:</label>
-        <select class="custom-select" id="startTime{{ i }}">
+
+        <label for="id_excursions-{{ i }}-start_time">From:</label>
+        <select name="excursions-{{ i }}-start_time" class="custom-select" id="id_excursions-{{ i }}-start_time">
             <option selected>Choose...</option>
-            <!-- Loop through all times -->
-            {% for time in times %}
-              <option value="{{ forloop.counter }}">{{ time }}</option>
+            {% for time in form.start_time.field.choices %}
+              <option value="{{ time.0 }}" {% if forloop.counter == 1 %} selected {% endif %}>{{ time.1 }}</option>
             {% endfor %}
         </select>
-        <label for="endTime{{ i }}">To:</label>
-        <select class="custom-select" id="endTime{{ i }}">
+
+        <label for="id_excursions-{{ i }}-end_time">To:</label>
+        <select name="excursions-{{ i }}-end_time" class="custom-select" id="id_excursions-{{ i }}-end_time">
             <option selected>Choose...</option>
-            <!-- Loop through all times -->
-            {% for time in times %}
-              <option value="{{ forloop.counter }}">{{ time }}</option>
-            {% endfor %}z
+            {% for time in form.end_time.field.choices %}
+              <option value="{{ time.0 }}" {% if forloop.counter == 2 %} selected {% endif %}>{{ time.1 }}</option>
+            {% endfor %}
         </select>
     </div>
-
+  {% endwith %}
 {% endfor %}
-{% for i in max_num_excursions_counter %}
+
+
     <script type="text/javascript">
-        $("#building{{ i }}").hide();
+    {% for form in formset_SelectBuilding %}
+      {% with i=forloop.counter0 %}
+        $("#excursion{{ i }}").hide();
         $("#addButton{{ i }}").hide();
-        $("#addButton{{loop_max|sub:1}}").show();
         $("#addButton{{ loop_max|sub:i }}").click(function() {
-            $("#building{{ loop_max|sub:i }}").show();
+            $("#excursion{{ loop_max|sub:i }}").show();
             $("#addButton{{ loop_max|sub:i }}").hide();
             $("#addButton{{ loop_max|sub:i|sub:1 }}").show();
         });
-    </script>
-{% endfor %}
+        {% endwith %}
+    {% endfor %}
+      $("#addButton{{loop_max}}").show();
+      </script>

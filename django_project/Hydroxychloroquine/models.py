@@ -18,7 +18,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         STAFF: "STA"
         OTHER: "O"
 
-    display_name = models.CharField(max_length=128, default="John Doe")
+    display_name = models.CharField(max_length=128, default="")
     email = models.EmailField(_("email address"), unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -41,8 +41,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Report(models.Model):
-    date_of_test = models.DateTimeField()
-    date_last_on_campus = models.DateTimeField()
+    date_of_test = models.DateField() # changed from DateTimeField to DateField
+    date_last_on_campus = models.DateField() # changed from DateTimeField to DateField
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -54,15 +54,16 @@ class Building(models.Model):
     building_name = models.CharField(max_length=128)
 
     def __str__(self):
-        return "%s %s" % (self.building_id, self.building_name)
+        # return "%s %s" % (self.building_id, self.building_name)
+        return str(self.building_name)
 
 
 class Excursion(models.Model):
-    report_id = models.ForeignKey(Report, on_delete=models.CASCADE)
+    report_id = models.ForeignKey(Report, on_delete=models.CASCADE, null=True, blank=True)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     building_id = models.ForeignKey(Building, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.TimeField() # changed from DateTimeField to TimeField
+    end_time = models.TimeField() # changed from DateTimeField to TimeField
 
     def __str__(self):
         return "%s %s %s" % (self.report_id, self.start_time, self.end_time)

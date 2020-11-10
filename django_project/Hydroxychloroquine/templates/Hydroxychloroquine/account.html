@@ -1,14 +1,14 @@
 {% extends "Hydroxychloroquine/base.html" %}
 {% load static %}
 {% block style %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link rel="stylesheet" href="{% static 'Hydroxychloroquine/account.css' %}" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'Hydroxychloroquine/account.css' %}" />
+
+
 
 {% endblock style %}
 {% block content %}
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -20,7 +20,7 @@
       <div class="modal-body">
         <form method="POST">
           {% csrf_token %}
-          {{form}}
+          {{form_userchange}}
           <input type="submit" value="Save Changes">
         </form>
       </div>
@@ -87,7 +87,12 @@
     <!-- end debugging -->
     <div class="form-group col top">
       <p>Select which buildings and times you would like to be notified for potential covid exposure</p>
-      {% include "Hydroxychloroquine/selectBuildings.html" %}
+      <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Submit buildings">
+
+        {% include "Hydroxychloroquine/selectBuildings.html" %}
+      </form>
     </div>
   </div>
 </div>
