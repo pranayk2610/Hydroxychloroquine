@@ -110,8 +110,8 @@ def signup(request):
             return redirect("Hydroxychloroquine-login")
         else:
             for k in form.errors.get_json_data():
-                v=form.errors.get_json_data()[k][0]['message']
-                messages.error(request,v)
+                v = form.errors.get_json_data()[k][0]["message"]
+                messages.error(request, v)
                 # print(v)
     else:
         form = forms.UserRegistrationForm()
