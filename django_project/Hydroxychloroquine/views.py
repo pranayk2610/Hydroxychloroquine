@@ -77,6 +77,7 @@ def account(request):
 
 
 def reportTest(request):
+    """
     models.Building.objects.all().delete()
     for i,n in enumerate(test_building_names, start=1):
         n=str(n)
@@ -84,6 +85,7 @@ def reportTest(request):
             building_id = int(i),
             building_name = str(n),
             )
+           """
         # print(e)
     # for x in models.Building.objects.all(): print(x)
     # print(models.Building.objects.first())
