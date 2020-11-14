@@ -94,6 +94,8 @@ def reportTest(request):
     # print(models.Building.objects.all().values('building_name') )
     SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions,max_num=max_num_excursions)
     if request.method == "POST":
+        models.Excursion.objects.all().delete()
+        models.Report.objects.all().delete()
         report_form = forms.ReportTestForm(request.POST)
         formset_SelectBuilding = SelectBuildingFormSet(request.POST,  prefix='excursions')
         print('report_form.is_valid():',report_form.is_valid())
