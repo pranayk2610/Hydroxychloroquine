@@ -132,6 +132,9 @@ def reportTest(request):
                         end_time = form.cleaned_data['end_time'],
                         )
                     print("  ***excursion object made***")
+            if report_made:
+                # Insert code to send email
+                pass
             return redirect("Hydroxychloroquine-home")
         else:
             return redirect("Hydroxychloroquine-account")
