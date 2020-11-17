@@ -11,11 +11,7 @@
               <div class="jumbotron" style="background-color: white">
                   <h1 class="display-5">Protect each other</h1>
                   <p class="lead">Reporting your test protects the people you care about lets others protect those they care about</p>
-                  {% if user.is_authenticated %}
                   <a class="btn btn-secondary btn-lg" href="{% url 'Hydroxychloroquine-reportTest' %}" role="button">Report a Test</a>
-                  {% else %}
-                  <a class="btn btn-secondary btn-lg" href="{% url 'Hydroxychloroquine-login' %}" role="button">Report a Test</a>
-                  {% endif %}
               </div>
           </div>
           <div class="col-md">

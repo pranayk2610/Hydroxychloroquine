@@ -87,7 +87,7 @@ def account(request):
 
     return render(request, "Hydroxychloroquine/account.html", context)
 
-
+@login_required
 def reportTest(request):
     """
     models.Building.objects.all().delete()
