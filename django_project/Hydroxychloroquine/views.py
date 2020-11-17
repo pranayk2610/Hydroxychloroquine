@@ -33,12 +33,22 @@ def data(request):
         "recent_reports": test_reports,
     }
     return render(request, "Hydroxychloroquine/data.html", context)
-    
+
 @login_required
 def account(request):
+    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions)
+
+    # userchange form
+    if request.method == "POST":
+        form_userchange = forms.CustomUserChangeForm(request.POST, instance=request.user)
+        if form_userchange.is_valid():
+            form_userchange.save(commit=True)
+            print("  ***username changed***")
+            return redirect("Hydroxychloroquine-account")
+    else:
+        form_userchange = forms.CustomUserChangeForm(instance=request.user)
 
     # formset_SelectBuilding
-    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions,max_num=max_num_excursions)
     if request.method == "POST":
         formset_SelectBuilding = SelectBuildingFormSet(request.POST,  prefix='excursions')
         print("formset_SelectBuilding.is_valid():",formset_SelectBuilding.is_valid())
@@ -63,14 +73,6 @@ def account(request):
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix='excursions')
 
-    # userchange form
-    if request.method == "POST":
-        form_userchange = forms.CustomUserChangeForm(request.POST, instance=request.user)
-        if form_userchange.is_valid():
-            form_userchange.save(commit=True)
-            return redirect("Hydroxychloroquine-account")
-    else:
-        form_userchange = forms.CustomUserChangeForm(instance=request.user)
 
     context = {
         "title": "account",
@@ -80,6 +82,7 @@ def account(request):
         "loop_max": len(formset_SelectBuilding)-1,
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
+        "users_excursions": models.Excursion.objects.filter(user_id=request.user).filter(report_id=None),
     }
 
     return render(request, "Hydroxychloroquine/account.html", context)
