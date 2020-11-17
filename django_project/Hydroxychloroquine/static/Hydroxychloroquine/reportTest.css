@@ -1,5 +1,5 @@
 .nav-item {
-    padding: 20px;
+    padding: 10px;
     color: black;
 }
 #reportTestForm{
@@ -7,7 +7,4 @@
 }
 .top {
     padding: 20px;
-}
-body {
-    background: #212521;
 }

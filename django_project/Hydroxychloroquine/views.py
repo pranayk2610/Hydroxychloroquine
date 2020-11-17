@@ -19,13 +19,22 @@ max_num_excursions = 2
 
 def home(request):
     print(request.method)
+
     context = {
         "title": "home",
         "recent_reports": test_reports,
     }
     return render(request, "Hydroxychloroquine/home.html", context)
 
+def data(request):
+    print(request.method)
 
+    context = {
+        "title": "data",
+        "recent_reports": test_reports,
+    }
+    return render(request, "Hydroxychloroquine/data.html", context)
+    
 @login_required
 def account(request):
 
@@ -107,6 +116,8 @@ def reportTest(request):
         forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
     )
     if request.method == "POST":
+        # models.Excursion.objects.all().delete()
+        # models.Report.objects.all().delete()
         report_form = forms.ReportTestForm(request.POST)
         formset_SelectBuilding = SelectBuildingFormSet(
             request.POST, prefix="excursions"

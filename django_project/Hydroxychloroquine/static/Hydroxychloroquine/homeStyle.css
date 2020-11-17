@@ -1,10 +1,13 @@
 .nav-item {
-    padding: 20px;
+    padding: 10px;
     color: black;
-}
-body {
-    background: #212521;
 }
 tr {
     background: #e0e0e0;
+}
+img {
+    padding: 10px;
+}
+.btn-data {
+    margin: 10px;
 }

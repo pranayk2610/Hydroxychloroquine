@@ -35,30 +35,49 @@
 <div class="container" id="accountInfo">
   <div class="col justify-content-center">
     <h1>My Account</h1>
+    <div class="row justify-content-around">
+      <h2>Personal Information</h2>
+      <h2>Selected Buildings</h2>
+    </div>
+
     <!-- User's personal information -->
-    <h2>Personal Information</h2>
-    <div class="row">
-      <div class="col-md-2">
-        <ul class="list-group">
-          <li class="list-group-item">Name</li>
-          <li class="list-group-item">Email</li>
-          <!-- <li class="list-group-item">UGA ID</li> -->
-        </ul>
+    <div class="row justify-content-around">
+      <div class="row justify-content-left">
+          <ul class="list-group">
+            <li class="list-group-item">Name</li>
+            <li class="list-group-item">Email</li>
+            <!-- <li class="list-group-item">UGA ID</li> -->
+          </ul>
+          <ul class="list-group">
+            <li class="list-group-item">{{request.user.display_name}}</li>
+            <li class="list-group-item">{{request.user.email}}</li>
+            <!-- <li class="list-group-item">nrc10711</li> -->
+          </ul>
       </div>
-      <div class="col-md-3">
+
+      <!-- User's selected buildings--> 
+      <div class="row justify-content-right">
         <ul class="list-group">
-          <li class="list-group-item">{{request.user.display_name}}</li>
-          <li class="list-group-item">{{request.user.email}}</li>
-          <!-- <li class="list-group-item">nrc10711</li> -->
+          {% for bldg in building %}
+          <form method="POST">
+            {% csrf_token %}
+            <li class="list-group-item"></li>{{forloop.counter }} : {{bldg.building_id}}</li>
+          </form>
+          {% endfor %}
+          <li class="list-group-item">placeholder2</li>
         </ul>
       </div>
     </div>
+    
+
     <div class="row row-edit">
       <button type="button" id="editButton" class="btn btn-secondary" data-toggle="modal" data-target="#editModal"
         style="margin: 15px;">Edit Account</button>
       <a href="{% url 'password_change' %}" id="editButton" class="btn btn-secondary" style="margin: 15px;"> Change
         Password</a>
     </div>
+     
+    
 
 
     <!-- for debugging -->
@@ -86,7 +105,7 @@
         </div> -->
     <!-- end debugging -->
     <div class="form-group col top">
-      <p>Select which buildings and times you would like to be notified for potential covid exposure</p>
+      <h4>Select which buildings and times you would like to be notified for potential covid exposure</h4>
       <form method="POST">
         {% csrf_token %}
         <input type="submit" value="Submit buildings">
