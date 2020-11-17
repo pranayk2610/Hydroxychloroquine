@@ -174,12 +174,7 @@ def reportTest(request):
                 #grabbing their emails
                 for x in eList:
                     temp = x
-<<<<<<< HEAD
-                    emailList = list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
-
-=======
                     emailList += list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
->>>>>>> b87018c7ec08272b5ec86dd120023f726a9289e9
                 # Insert code to send email
                 send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected", "hydroxy.app@gmail.com", emailList)
             return redirect("Hydroxychloroquine-home")
