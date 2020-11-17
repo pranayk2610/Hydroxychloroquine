@@ -122,13 +122,13 @@ def reportTest(request):
                         print("  ***creating report object***")
                         for f in list(report_form.fields):
                             print("field:", f, "| data=", report_form.cleaned_data[f])
-                        r = models.Report.objects.create(
-                            user_id=request.user,
-                            date_of_test=report_form.cleaned_data["date_of_test"],
-                            date_last_on_campus=report_form.cleaned_data[
-                                "date_of_test"
-                            ],
-                        )
+                            r = models.Report.objects.create(
+                                user_id=request.user,
+                                date_of_test=report_form.cleaned_data["date_of_test"],
+                                date_last_on_campus=report_form.cleaned_data[
+                                    "date_of_test"
+                                ],
+                            )
                         print("  ***report object made***")
                         report_made = True
 
