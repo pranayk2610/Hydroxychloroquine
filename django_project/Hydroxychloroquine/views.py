@@ -5,7 +5,7 @@ from django_email_verification import sendConfirm
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.http import HttpResponse, HttpResponseRedirect
 from .testingVars import test_buildings,test_building_names, test_reports
@@ -17,6 +17,15 @@ from . import models
 
 # for display purposes
 max_num_excursions = 2
+
+def Remove_building(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'A user with this username already exists.'
+    return JsonResponse(data)
 
 def home(request):
     print(request.method)
@@ -166,7 +175,7 @@ def reportTest(request):
                 for x in eList:
                     temp = x
                     emailList = list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
-                
+
                 # Insert code to send email
                 send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected", "hydroxy.app@gmail.com", emailList)
             return redirect("Hydroxychloroquine-home")

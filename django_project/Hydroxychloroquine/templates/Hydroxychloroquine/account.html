@@ -7,6 +7,27 @@
 
 
 {% endblock style %}
+
+{% block javascript %}
+  <script>
+    // https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html
+    $("#id_username").change(function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        url: form.attr("data-validate-username-url"),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert(data.error_message);
+          }
+        }
+      });
+
+    });
+  </script>
+{% endblock %}
+
 {% block content %}
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
