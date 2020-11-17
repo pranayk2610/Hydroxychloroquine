@@ -141,32 +141,6 @@ def reportTest(request):
                         end_time = form.cleaned_data['end_time'],
                         )
                     print("  ***excursion object made***")
-<<<<<<< HEAD
-=======
-            if report_made:
-                #finding all the building impacted
-                buildingList = [0]* 10
-                #find the last report submitted ^
-                reportId = models.Report.objects.values_list('id').last()
-                rId = reportId[0]
-                #adding the buildings impacted in that report^
-                eList = list(models.Excursion.objects.filter(report_id_id = rId).values_list('building_id_id', flat = True))
-                for x in eList:
-                    temp = x
-                    #getting the builing names
-                    buildingList = models.Building.objects.filter(building_id = temp).values_list('building_id', flat = True)
-                buildingList = list( dict.fromkeys(buildingList) )
-                #finding all of the users with the buildings added and effected
-                eList = models.Excursion.objects.exclude(report_id__isnull = False).values_list('user_id', flat = True)
-                eList = list( dict.fromkeys(eList) )
-                #grabbing their emails
-                for x in eList:
-                    temp = x
-                    emailList = list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
-                
-                # Insert code to send email
-                send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected. Please check the Covid Data page on the website to see what building was effected.", "hydroxy.app@gmail.com", emailList)
->>>>>>> 87f7d724aeefc98a7e088a8f650a88442c6f880f
             return redirect("Hydroxychloroquine-home")
         else:
             return redirect("Hydroxychloroquine-account")
