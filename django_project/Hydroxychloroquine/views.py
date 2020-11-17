@@ -4,8 +4,6 @@ from django.contrib.auth import views as auth_views
 from django_email_verification import sendConfirm
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from django.http import HttpResponse
 
 from django.http import HttpResponse, HttpResponseRedirect
 from .testingVars import test_buildings,test_building_names, test_reports
@@ -20,13 +18,22 @@ max_num_excursions = 2
 
 def home(request):
     print(request.method)
+
     context = {
         "title": "home",
         "recent_reports": test_reports,
     }
     return render(request, "Hydroxychloroquine/home.html", context)
 
+def data(request):
+    print(request.method)
 
+    context = {
+        "title": "data",
+        "recent_reports": test_reports,
+    }
+    return render(request, "Hydroxychloroquine/data.html", context)
+    
 @login_required
 def account(request):
 
@@ -134,29 +141,6 @@ def reportTest(request):
                         end_time = form.cleaned_data['end_time'],
                         )
                     print("  ***excursion object made***")
-            if report_made:
-				#finding all the building impacted
-				buildingList = [0]* 10
-				#find the last report submitted ^
-				reportId = models.Report.objects.values_list('id').last()
-				rId = reportId[0]
-				#adding the buildings impacted in that report^
-				eList = list(models.Excursion.objects.filter(report_id_id = num).values_list('building_id_id', flat = True))
-				for x in eList:
-					temp = x
-					#getting the builing names
-					buildingList = models.Building.objects.filter(building_id = temp).values_list('building_id', flat = True)
-				buildingList = list( dict.fromkeys(buildingList) )
-				#finding all of the users with the buildings added and effected
-				eList = models.Excursion.objects.exclude(report_id__isnull = False).values_list('user_id', flat = True)
-				eList = list( dict.fromkeys(eList) )
-				#grabbing their emails
-				for x in eList:
-					temp = x
-					emailList = list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
-				
-                # Insert code to send email
-                pass
             return redirect("Hydroxychloroquine-home")
         else:
             return redirect("Hydroxychloroquine-account")

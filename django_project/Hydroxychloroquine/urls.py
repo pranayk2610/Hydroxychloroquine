@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path("", views.home, name="Hydroxychloroquine-home"),
     path("home/", views.home, name="Hydroxychloroquine-home"),
+    path("data/", views.data, name="Hydroxychloroquine-data"),
     path("account/", views.account, name="Hydroxychloroquine-account"),
     path("reportTest/", views.reportTest, name="Hydroxychloroquine-reportTest"),
     path(

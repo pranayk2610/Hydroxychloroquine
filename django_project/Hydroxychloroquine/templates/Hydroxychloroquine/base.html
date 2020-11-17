@@ -25,6 +25,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'Hydroxychloroquine/homeStyle.css' %}" />
 
     <!-- Other CSS/Styles -->
     {% block style %}{% endblock %}
@@ -33,7 +34,7 @@
 <body>
     <!-- Include navbar unless the "forgotPassword" page -->
     {% if title != "Password reset" and title != "Password change"%}
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #bb1231;">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-inverse" style="background-color: #bb1231;">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'Hydroxychloroquine-home' %}">Home</a>
@@ -41,6 +42,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'Hydroxychloroquine-reportTest' %}">Report Test</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Hydroxychloroquine-data' %}">Covid Data</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav navbar-right">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Account</a>
                 <ul class="dropdown-menu">

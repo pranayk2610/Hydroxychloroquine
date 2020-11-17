@@ -1,5 +1,5 @@
 .nav-item {
-    padding: 20px;
+    padding: 10px;
     color: black;
 }
 #accountInfo{
@@ -7,9 +7,6 @@
 }
 .top {
     padding: 20px;
-}
-body {
-    background: #212521;
 }
 .row-edit {
     padding: 20px

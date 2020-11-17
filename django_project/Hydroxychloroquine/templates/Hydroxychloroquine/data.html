@@ -1,0 +1,54 @@
+{% extends "Hydroxychloroquine/base.html" %}
+{% load static %}
+{% block style %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'Hydroxychloroquine/homeStyle.css' %}" />
+{% endblock style %}
+{% block content %}
+<div class="container">
+    <div class="col justify-content-center">
+        <div>
+            <iframe src="https://covid19.biglocalnews.org/county-maps/index.html?embed=stateCounty#/county/13059" width="100%" height="950" marginheight="0" marginwidth="0" frameborder="0"></iframe>
+        </div>
+        <div class="jumbotron " style="background-color: white">
+            <h2 class="display-15" >Test Results</h1>
+            <p class="lead">
+                Results are ordered from newest to oldest and given with general information on where the person who
+                tested positve frequents.
+            </p>
+        </div>
+        <table class="table table-striped table-light justify-content-center">
+          <thead>
+              <tr>
+                  <th width="15%">
+                      <h5>Date Reported</h5>
+                  </th>
+                  <th width="10%">
+                      <h5>Position</h5>
+                  </th>
+                  <th width="15%">
+                      <h5>Date Last On Campus</h5>
+                  </th>
+                  <th width="45%">
+                      <h5>Buildings Impacted</h5>
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- recent_reports should be ordered -->
+              <!-- TODO fix var names -->
+              {% for report in recent_reports %}
+                  <tr>
+                      <td>{{ report.DateReported }}</td>
+                      <td>{{ report.Position }}</td>
+                      <td>{{ report.DateLastOnCampus }}</td>
+                      <td>{{ report.BuildingsImpacted }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -6,40 +6,48 @@
 {% endblock style %}
 {% block content %}
   <div class="container">
-      <div class="col justify-content-center">
-          <table class="table table-striped table-light justify-content-center">
-            <thead>
-                <tr style="background-color: white">
-                    <td><h4>October</h4></td>
-                </tr>
-                <tr>
-                    <th width="15%">
-                        <h5>Date Reported</h5>
-                    </th>
-                    <th width="10%">
-                        <h5>Position</h5>
-                    </th>
-                    <th width="15%">
-                        <h5>Date Last On Campus</h5>
-                    </th>
-                    <th width="45%">
-                        <h5>Buildings Impacted</h5>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- recent_reports should be ordered -->
-                <!-- TODO fix var names -->
-                {% for report in recent_reports %}
-                    <tr>
-                        <td>{{ report.DateReported }}</td>
-                        <td>{{ report.Position }}</td>
-                        <td>{{ report.DateLastOnCampus }}</td>
-                        <td>{{ report.BuildingsImpacted }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+      <div class="row align-items-center">
+          <div class="col-md">
+              <div class="jumbotron" style="background-color: white">
+                  <h1 class="display-5">Protect each other</h1>
+                  <p class="lead">Reporting your test protects the people you care about lets others protect those they care about</p>
+                  {% if user.is_authenticated %}
+                  <a class="btn btn-secondary btn-lg" href="{% url 'Hydroxychloroquine-reportTest' %}" role="button">Report a Test</a>
+                  {% else %}
+                  <a class="btn btn-secondary btn-lg" href="{% url 'Hydroxychloroquine-login' %}" role="button">Report a Test</a>
+                  {% endif %}
+              </div>
+          </div>
+          <div class="col-md">
+              <img src="{% static 'Hydroxychloroquine/uga-inspirational.jpg' %}" width="100%" class="rounded mx-auto d-block">
+          </div>
+
       </div>
-  </div>
+      <div class="row align-items-center">
+          <div class="col-md">
+              <img src="{% static 'Hydroxychloroquine/covidTesting.jpg' %}" width="100%" class="rounded">
+          </div>
+          <div class="col-md">
+              <div class="jumbotron" style="background-color: white">
+                  <h1 class="display-5">Protect Yourself</h1>
+                  <p class="lead">Get tested regulary so you know if you need to quarantine</p>
+                  <hr class="my-4">
+                  <p>UGA offers free surveillance testing for asymptomatic individuals, now including spit tests! Sign up below!</p>
+                  <a class="btn btn-secondary btn-lg" href="https://clia.vetview.vet.uga.edu/" role="button">Sign up!</a>
+              </div>
+          </div>
+
+      </div>
+      <div class="jumbotron">
+          <h1 class="display-5">Stay informed</h1>
+          <p class="lead">One of the most effective ways to fight covid is by making sure everyone has the latest information</p>
+          <hr class="my-4">
+          <div class="row">
+              <a class="btn btn-secondary btn-lg btn-data" href="https://www.redandblack.com/coronavirus/" role="button">Local Covid News</a>
+              <a class="btn btn-secondary btn-lg btn-data" href="{% url 'Hydroxychloroquine-data' %}" role="button">Local Covid Data</a>
+              <a class="btn btn-secondary btn-lg btn-data" href="https://www.nytimes.com/news-event/coronavirus?name=styln-coronavirus&region=TOP_BANNER&block=storyline_menu_recirc&action=click&pgtype=Interactive&impression_id=95e7a160-2906-11eb-ac1e-1592fc81d428&variant=1_Show" role="button">National Covid News</a>
+              <a class="btn btn-secondary btn-lg btn-data" href="https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html" role="button">National Covid Data</a>
+          </div>
+      </div>
+
 {% endblock content %}
