@@ -18,6 +18,17 @@ from . import models
 # for display purposes
 max_num_excursions = 2
 
+def convert_to_24_hour_time(t):
+    print("t start",t)
+    if t[-2:]=='pm':
+        splits=t.split(":")
+        hour=splits[0]
+        splits[0]=str(int(hour)+12)
+        t=":".join(splits)
+    print("t end",t)
+    return t
+
+
 def Remove_building(request):
     username = request.GET.get('username', None)
     data = {
@@ -76,11 +87,11 @@ def account(request):
                 e = models.Excursion.objects.create(
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
-                    start_time = form.cleaned_data['start_time'],
-                    end_time = form.cleaned_data['end_time'],
+                    start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
+                    end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                     )
                 print("  ***excursion object made***")
-
+        return redirect("Hydroxychloroquine-account")
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix='excursions')
 
@@ -151,8 +162,8 @@ def reportTest(request):
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
-                        start_time = form.cleaned_data['start_time'],
-                        end_time = form.cleaned_data['end_time'],
+                        start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
+                        end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                         )
                     print("  ***excursion object made***")
             if report_made:
@@ -179,7 +190,7 @@ def reportTest(request):
                 send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected", "hydroxy.app@gmail.com", emailList)
             return redirect("Hydroxychloroquine-home")
         else:
-            return redirect("Hydroxychloroquine-account")
+            return redirect("Hydroxychloroquine-home")
     else:
         report_form = forms.ReportTestForm()
         formset_SelectBuilding = SelectBuildingFormSet(prefix='excursions')

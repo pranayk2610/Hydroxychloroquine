@@ -56,7 +56,6 @@ class SelectBuildingForm(django_forms.Form):
     )
 
 
-
 class ReportTestForm(django_forms.Form):
     # incomplete
     # based on https://stackoverflow.com/questions/61461129/django-radio-buttons-appearing-as-bullet-point-list-inside-mark-safe
