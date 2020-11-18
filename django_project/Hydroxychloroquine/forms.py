@@ -3,6 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.forms import ModelForm
 from django import forms as django_forms
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from . import models
 
@@ -11,6 +13,14 @@ class UserRegistrationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = models.CustomUser
         fields = ("display_name", "email", "password1", "password2")
+
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+        split = data.split("@")
+        if split[1] != "uga.edu":
+            raise ValidationError("Email needs to be a university email")
+
+        return data.lower()
 
 
 class CustomUserChangeForm(ModelForm):
@@ -24,11 +34,20 @@ class CustomAuthenticationForm(AuthenticationForm):
         label="Remember Me", widget=django_forms.CheckboxInput, required=False
     )
 
+    AuthenticationForm.error_messages["invalid_login"] = _(
+        "Please enter a correct %(username)s and password. "
+        "Note that passwords are case-sensitive."
+    )
+
+    def clean_username(self):
+        data = self.cleaned_data["username"]
+        return data.lower()
+
 
 class ExcursionForm(ModelForm):
     class Meta:
         model = models.Excursion
-        fields = ['report_id', 'user_id', 'building_id', 'start_time', 'end_time']
+        fields = ["report_id", "user_id", "building_id", "start_time", "end_time"]
 
 
 class SelectBuildingForm(django_forms.Form):
@@ -37,24 +56,27 @@ class SelectBuildingForm(django_forms.Form):
         # widget=forms.Select(attrs={'class': 'form-control', 'required': True})
         # to_field_name="building_id",
         # initial=models.Building.objects.first(),
-        required = False,
-        )
-    times = ['{}:00{}'.format(h, ap) for ap in ('am', 'pm') for h in ([12] + list(range(1,12)))]
-    time_choices = [(t,t) for i,t in enumerate(times,start=1)]
+        required=False,
+    )
+    times = [
+        "{}:00{}".format(h, ap)
+        for ap in ("am", "pm")
+        for h in ([12] + list(range(1, 12)))
+    ]
+    time_choices = [(t, t) for i, t in enumerate(times, start=1)]
     # time_choices = [(i,t) for i,t in enumerate(times,start=1)]
     start_time = django_forms.ChoiceField(
         label="Start Time",
         choices=time_choices,
         # initial="12:00am",
-        required = False,
+        required=False,
     )
     end_time = django_forms.ChoiceField(
         label="End Time",
         choices=time_choices,
         # initial="11:00pm",
-        required = False,
+        required=False,
     )
-
 
 
 class ReportTestForm(django_forms.Form):

@@ -18,17 +18,16 @@ from . import models
 # for display purposes
 max_num_excursions = 2
 
-<<<<<<< HEAD
-=======
+
 def Remove_building(request):
-    username = request.GET.get('username', None)
+    username = request.GET.get("username", None)
     data = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
+        "is_taken": models.CustomUser.objects.filter(username__iexact=username).exists()
     }
-    if data['is_taken']:
-        data['error_message'] = 'A user with this username already exists.'
+    if data["is_taken"]:
+        data["error_message"] = "A user with this username already exists."
     return JsonResponse(data)
->>>>>>> edee73ab242306380b02f4351ff965719713464a
+
 
 def home(request):
     print(request.method)
@@ -39,6 +38,7 @@ def home(request):
     }
     return render(request, "Hydroxychloroquine/home.html", context)
 
+
 def data(request):
     print(request.method)
 
@@ -48,13 +48,18 @@ def data(request):
     }
     return render(request, "Hydroxychloroquine/data.html", context)
 
+
 @login_required
 def account(request):
-    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions)
+    SelectBuildingFormSet = formset_factory(
+        forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
+    )
 
     # userchange form
     if request.method == "POST":
-        form_userchange = forms.CustomUserChangeForm(request.POST, instance=request.user)
+        form_userchange = forms.CustomUserChangeForm(
+            request.POST, instance=request.user
+        )
         if form_userchange.is_valid():
             form_userchange.save(commit=True)
             print("  ***username changed***")
@@ -63,12 +68,6 @@ def account(request):
         form_userchange = forms.CustomUserChangeForm(instance=request.user)
 
     # formset_SelectBuilding
-<<<<<<< HEAD
-    SelectBuildingFormSet = formset_factory(
-        forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
-    )
-=======
->>>>>>> edee73ab242306380b02f4351ff965719713464a
     if request.method == "POST":
         formset_SelectBuilding = SelectBuildingFormSet(
             request.POST, prefix="excursions"
@@ -95,20 +94,6 @@ def account(request):
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
 
-<<<<<<< HEAD
-    # userchange form
-    if request.method == "POST":
-        form_userchange = forms.CustomUserChangeForm(
-            request.POST, instance=request.user
-        )
-        if form_userchange.is_valid():
-            form_userchange.save(commit=True)
-            return redirect("Hydroxychloroquine-account")
-    else:
-        form_userchange = forms.CustomUserChangeForm(instance=request.user)
-=======
->>>>>>> edee73ab242306380b02f4351ff965719713464a
-
     context = {
         "title": "account",
         "buildings": list(models.Building.objects.all()),
@@ -121,10 +106,13 @@ def account(request):
         "loop_max": len(formset_SelectBuilding) - 1,
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
-        "users_excursions": models.Excursion.objects.filter(user_id=request.user).filter(report_id=None),
+        "users_excursions": models.Excursion.objects.filter(
+            user_id=request.user
+        ).filter(report_id=None),
     }
 
     return render(request, "Hydroxychloroquine/account.html", context)
+
 
 @login_required
 def reportTest(request):
@@ -190,27 +178,48 @@ def reportTest(request):
                     )
                     print("  ***excursion object made***")
             if report_made:
-                #finding all the building impacted
+                # finding all the building impacted
                 buildingList = []
                 emailList = []
-                #find the last report submitted ^
-                reportId = models.Report.objects.values_list('id').last()
+                # find the last report submitted ^
+                reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
-                #adding the buildings impacted in that report^
-                eList = list(models.Excursion.objects.filter(report_id_id = rId).values_list('building_id_id', flat = True))
+                # adding the buildings impacted in that report^
+                eList = list(
+                    models.Excursion.objects.filter(report_id_id=rId).values_list(
+                        "building_id_id", flat=True
+                    )
+                )
                 for x in eList:
                     temp = x
-                    #getting the builing names
-                    buildingList += list( dict.fromkeys(models.Building.objects.filter(building_id = temp).values_list('building_id', flat = True)))
-                #finding all of the users with the buildings added and effected
-                eList = models.Excursion.objects.exclude(report_id__isnull = False).values_list('user_id', flat = True)
-                eList = list( dict.fromkeys(eList) )
-                #grabbing their emails
+                    # getting the builing names
+                    buildingList += list(
+                        dict.fromkeys(
+                            models.Building.objects.filter(
+                                building_id=temp
+                            ).values_list("building_id", flat=True)
+                        )
+                    )
+                # finding all of the users with the buildings added and effected
+                eList = models.Excursion.objects.exclude(
+                    report_id__isnull=False
+                ).values_list("user_id", flat=True)
+                eList = list(dict.fromkeys(eList))
+                # grabbing their emails
                 for x in eList:
                     temp = x
-                    emailList += list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
+                    emailList += list(
+                        models.CustomUser.objects.filter(id=temp).values_list(
+                            "email", flat=True
+                        )
+                    )
                 # Insert code to send email
-                send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected", "hydroxy.app@gmail.com", emailList)
+                send_mail(
+                    "Positive COVID-19 test reported",
+                    "A positive COVID-19 test has been reported in one of the buildings you have selected",
+                    "hydroxy.app@gmail.com",
+                    emailList,
+                )
             return redirect("Hydroxychloroquine-home")
         else:
             return redirect("Hydroxychloroquine-account")
