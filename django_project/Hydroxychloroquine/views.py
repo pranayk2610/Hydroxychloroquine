@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 
 from django.http import HttpResponse, HttpResponseRedirect
-from .testingVars import test_buildings,test_building_names, test_reports
+from .testingVars import test_buildings, test_building_names, test_reports
 from django.forms import formset_factory
 from . import forms
 from . import models
@@ -18,6 +18,7 @@ from . import models
 # for display purposes
 max_num_excursions = 2
 
+<<<<<<< HEAD
 def convert_to_24_hour_time(t):
     print("t start",t)
     if t[-2:]=='pm':
@@ -28,15 +29,18 @@ def convert_to_24_hour_time(t):
     print("t end",t)
     return t
 
+=======
+>>>>>>> 7971aade0608c04507d07fc9f8d1014f38702aff
 
 def Remove_building(request):
-    username = request.GET.get('username', None)
+    username = request.GET.get("username", None)
     data = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
+        "is_taken": models.CustomUser.objects.filter(username__iexact=username).exists()
     }
-    if data['is_taken']:
-        data['error_message'] = 'A user with this username already exists.'
+    if data["is_taken"]:
+        data["error_message"] = "A user with this username already exists."
     return JsonResponse(data)
+
 
 def home(request):
     print(request.method)
@@ -47,6 +51,7 @@ def home(request):
     }
     return render(request, "Hydroxychloroquine/home.html", context)
 
+
 def data(request):
     print(request.method)
 
@@ -56,13 +61,18 @@ def data(request):
     }
     return render(request, "Hydroxychloroquine/data.html", context)
 
+
 @login_required
 def account(request):
-    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions)
+    SelectBuildingFormSet = formset_factory(
+        forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
+    )
 
     # userchange form
     if request.method == "POST":
-        form_userchange = forms.CustomUserChangeForm(request.POST, instance=request.user)
+        form_userchange = forms.CustomUserChangeForm(
+            request.POST, instance=request.user
+        )
         if form_userchange.is_valid():
             form_userchange.save(commit=True)
             print("  ***username changed***")
@@ -72,42 +82,58 @@ def account(request):
 
     # formset_SelectBuilding
     if request.method == "POST":
-        formset_SelectBuilding = SelectBuildingFormSet(request.POST,  prefix='excursions')
-        print("formset_SelectBuilding.is_valid():",formset_SelectBuilding.is_valid())
+        formset_SelectBuilding = SelectBuildingFormSet(
+            request.POST, prefix="excursions"
+        )
+        print("formset_SelectBuilding.is_valid():", formset_SelectBuilding.is_valid())
         # if formset_SelectBuilding.is_valid():
         for form in formset_SelectBuilding:
             if form.is_valid():
                 # make excursion object
                 print("  ***creating excursion object***")
                 for f in list(form.fields):
-                    print("form.cleaned_data:",form.cleaned_data)
-                    print("field:",f,"| data=", form[f].value())
+                    print("form.cleaned_data:", form.cleaned_data)
+                    print("field:", f, "| data=", form[f].value())
                     # print("field:",f,"choice=", form.fields[f].choices)
-                    print("field:",f,"| cleaned data=", form.cleaned_data[f])
+                    print("field:", f, "| cleaned data=", form.cleaned_data[f])
                 e = models.Excursion.objects.create(
+<<<<<<< HEAD
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
                     start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                     end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                     )
+=======
+                    user_id=request.user,
+                    building_id=form.cleaned_data["building_id"],
+                    start_time=form.cleaned_data["start_time"],
+                    end_time=form.cleaned_data["end_time"],
+                )
+>>>>>>> 7971aade0608c04507d07fc9f8d1014f38702aff
                 print("  ***excursion object made***")
         return redirect("Hydroxychloroquine-account")
     else:
-        formset_SelectBuilding = SelectBuildingFormSet(prefix='excursions')
-
+        formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
 
     context = {
         "title": "account",
         "buildings": list(models.Building.objects.all()),
-        "times": ['{}:00{}'.format(h, ap) for ap in ('am', 'pm') for h in ([12] + list(range(1,12)))],
+        "times": [
+            "{}:00{}".format(h, ap)
+            for ap in ("am", "pm")
+            for h in ([12] + list(range(1, 12)))
+        ],
         "max_num_excursions_counter": range(1, 1 + max_num_excursions),
-        "loop_max": len(formset_SelectBuilding)-1,
+        "loop_max": len(formset_SelectBuilding) - 1,
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
-        "users_excursions": models.Excursion.objects.filter(user_id=request.user).filter(report_id=None),
+        "users_excursions": models.Excursion.objects.filter(
+            user_id=request.user
+        ).filter(report_id=None),
     }
 
     return render(request, "Hydroxychloroquine/account.html", context)
+
 
 @login_required
 def reportTest(request):
@@ -119,22 +145,26 @@ def reportTest(request):
             building_id = int(i),
             building_name = str(n),
             )
-           """
-        # print(e)
+    """
+    # print(e)
     # for x in models.Building.objects.all(): print(x)
     # print(models.Building.objects.first())
 
     # for x in models.Building.objects.all(): print(str(x.building_name))
     # print(models.Building.objects.all().values('building_name') )
-    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions,max_num=max_num_excursions)
+    SelectBuildingFormSet = formset_factory(
+        forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
+    )
     if request.method == "POST":
         # models.Excursion.objects.all().delete()
         # models.Report.objects.all().delete()
         report_form = forms.ReportTestForm(request.POST)
-        formset_SelectBuilding = SelectBuildingFormSet(request.POST,  prefix='excursions')
-        print('report_form.is_valid():',report_form.is_valid())
-        print("formset_SelectBuilding.is_valid():",formset_SelectBuilding.is_valid())
-        report_made=False
+        formset_SelectBuilding = SelectBuildingFormSet(
+            request.POST, prefix="excursions"
+        )
+        print("report_form.is_valid():", report_form.is_valid())
+        print("formset_SelectBuilding.is_valid():", formset_SelectBuilding.is_valid())
+        report_made = False
         if report_form.is_valid():
             for form in formset_SelectBuilding:
                 if form.is_valid():
@@ -142,70 +172,105 @@ def reportTest(request):
                     if not report_made:
                         print("  ***creating report object***")
                         for f in list(report_form.fields):
-                            print("field:",f,"| data=", report_form.cleaned_data[f])
-                        r = models.Report.objects.create(
-                            user_id = request.user,
-                            date_of_test = report_form.cleaned_data['date_of_test'],
-                            date_last_on_campus = report_form.cleaned_data['date_of_test'],
+                            print("field:", f, "| data=", report_form.cleaned_data[f])
+                            r = models.Report.objects.create(
+                                user_id=request.user,
+                                date_of_test=report_form.cleaned_data["date_of_test"],
+                                date_last_on_campus=report_form.cleaned_data[
+                                    "date_of_test"
+                                ],
                             )
                         print("  ***report object made***")
-                        report_made=True
+                        report_made = True
 
                     # make excursion object and accociate with report
                     print("  ***creating excursion object***")
                     for f in list(form.fields):
-                        print("form.cleaned_data:",form.cleaned_data)
-                        print("field:",f,"| data=", form[f].value())
+                        print("form.cleaned_data:", form.cleaned_data)
+                        print("field:", f, "| data=", form[f].value())
                         # print("field:",f,"choice=", form.fields[f].choices)
-                        print("field:",f,"| cleaned data=", form.cleaned_data[f])
+                        print("field:", f, "| cleaned data=", form.cleaned_data[f])
                     e = models.Excursion.objects.create(
+<<<<<<< HEAD
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
                         start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                         end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                         )
+=======
+                        report_id=r,
+                        user_id=request.user,
+                        building_id=form.cleaned_data["building_id"],
+                        start_time=form.cleaned_data["start_time"],
+                        end_time=form.cleaned_data["end_time"],
+                    )
+>>>>>>> 7971aade0608c04507d07fc9f8d1014f38702aff
                     print("  ***excursion object made***")
             if report_made:
-                #finding all the building impacted
+                # finding all the building impacted
                 buildingList = []
                 emailList = []
-                #find the last report submitted ^
-                reportId = models.Report.objects.values_list('id').last()
+                # find the last report submitted ^
+                reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
-                #adding the buildings impacted in that report^
-                eList = list(models.Excursion.objects.filter(report_id_id = rId).values_list('building_id_id', flat = True))
+                # adding the buildings impacted in that report^
+                eList = list(
+                    models.Excursion.objects.filter(report_id_id=rId).values_list(
+                        "building_id_id", flat=True
+                    )
+                )
                 for x in eList:
                     temp = x
-                    #getting the builing names
-                    buildingList += list( dict.fromkeys(models.Building.objects.filter(building_id = temp).values_list('building_id', flat = True)))
-                #finding all of the users with the buildings added and effected
-                eList = models.Excursion.objects.exclude(report_id__isnull = False).values_list('user_id', flat = True)
-                eList = list( dict.fromkeys(eList) )
-                #grabbing their emails
+                    # getting the builing names
+                    buildingList += list(
+                        dict.fromkeys(
+                            models.Building.objects.filter(
+                                building_id=temp
+                            ).values_list("building_id", flat=True)
+                        )
+                    )
+                # finding all of the users with the buildings added and effected
+                eList = models.Excursion.objects.exclude(
+                    report_id__isnull=False
+                ).values_list("user_id", flat=True)
+                eList = list(dict.fromkeys(eList))
+                # grabbing their emails
                 for x in eList:
                     temp = x
-                    emailList += list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
+                    emailList += list(
+                        models.CustomUser.objects.filter(id=temp).values_list(
+                            "email", flat=True
+                        )
+                    )
                 # Insert code to send email
-                send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected", "hydroxy.app@gmail.com", emailList)
+                send_mail(
+                    "Positive COVID-19 test reported",
+                    "A positive COVID-19 test has been reported in one of the buildings you have selected",
+                    "hydroxy.app@gmail.com",
+                    emailList,
+                )
             return redirect("Hydroxychloroquine-home")
         else:
             return redirect("Hydroxychloroquine-home")
     else:
         report_form = forms.ReportTestForm()
-        formset_SelectBuilding = SelectBuildingFormSet(prefix='excursions')
+        formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
     context = {
         "title": "account",
         "buildings": list(models.Building.objects.all()),
-        "times": ['{}:00{}'.format(h, ap) for ap in ('am', 'pm') for h in ([12] + list(range(1,12)))],
+        "times": [
+            "{}:00{}".format(h, ap)
+            for ap in ("am", "pm")
+            for h in ([12] + list(range(1, 12)))
+        ],
         "max_num_excursions_counter": range(1, 1 + max_num_excursions),
-        "loop_max": len(formset_SelectBuilding)-1,
+        "loop_max": len(formset_SelectBuilding) - 1,
         "report_form": report_form,
         "formset_SelectBuilding": formset_SelectBuilding,
     }
 
     return render(request, "Hydroxychloroquine/reportTest.html", context)
-
 
 
 def selectBuildings(request):
@@ -249,8 +314,8 @@ def signup(request):
             return redirect("Hydroxychloroquine-login")
         else:
             for k in form.errors.get_json_data():
-                v=form.errors.get_json_data()[k][0]['message']
-                messages.error(request,v)
+                v = form.errors.get_json_data()[k][0]["message"]
+                messages.error(request, v)
                 # print(v)
     else:
         form = forms.UserRegistrationForm()
