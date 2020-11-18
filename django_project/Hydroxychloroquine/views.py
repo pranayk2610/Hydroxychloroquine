@@ -18,7 +18,6 @@ from . import models
 # for display purposes
 max_num_excursions = 2
 
-<<<<<<< HEAD
 def convert_to_24_hour_time(t):
     print("t start",t)
     if t[-2:]=='pm':
@@ -29,8 +28,6 @@ def convert_to_24_hour_time(t):
     print("t end",t)
     return t
 
-=======
->>>>>>> 7971aade0608c04507d07fc9f8d1014f38702aff
 
 def Remove_building(request):
     username = request.GET.get("username", None)
@@ -97,19 +94,11 @@ def account(request):
                     # print("field:",f,"choice=", form.fields[f].choices)
                     print("field:", f, "| cleaned data=", form.cleaned_data[f])
                 e = models.Excursion.objects.create(
-<<<<<<< HEAD
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
                     start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                     end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                     )
-=======
-                    user_id=request.user,
-                    building_id=form.cleaned_data["building_id"],
-                    start_time=form.cleaned_data["start_time"],
-                    end_time=form.cleaned_data["end_time"],
-                )
->>>>>>> 7971aade0608c04507d07fc9f8d1014f38702aff
                 print("  ***excursion object made***")
         return redirect("Hydroxychloroquine-account")
     else:
@@ -191,21 +180,12 @@ def reportTest(request):
                         # print("field:",f,"choice=", form.fields[f].choices)
                         print("field:", f, "| cleaned data=", form.cleaned_data[f])
                     e = models.Excursion.objects.create(
-<<<<<<< HEAD
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
                         start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                         end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                         )
-=======
-                        report_id=r,
-                        user_id=request.user,
-                        building_id=form.cleaned_data["building_id"],
-                        start_time=form.cleaned_data["start_time"],
-                        end_time=form.cleaned_data["end_time"],
-                    )
->>>>>>> 7971aade0608c04507d07fc9f8d1014f38702aff
                     print("  ***excursion object made***")
             if report_made:
                 # finding all the building impacted
