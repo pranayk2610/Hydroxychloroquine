@@ -1,9 +1,11 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.conf.urls import url
 
 from . import views
 
 urlpatterns = [
+    url(r'^ajax/Remove_building/$', views.Remove_building, name='Remove_building'),
     path("", views.home, name="Hydroxychloroquine-home"),
     path("home/", views.home, name="Hydroxychloroquine-home"),
     path("data/", views.data, name="Hydroxychloroquine-data"),

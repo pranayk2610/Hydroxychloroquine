@@ -7,6 +7,27 @@
 
 
 {% endblock style %}
+
+{% block javascript %}
+  <script>
+    // https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html
+    $("#id_username").change(function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        url: form.attr("data-validate-username-url"),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert(data.error_message);
+          }
+        }
+      });
+
+    });
+  </script>
+{% endblock %}
+
 {% block content %}
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -34,50 +55,110 @@
 
 <div class="container" id="accountInfo">
   <div class="col justify-content-center">
-    <h1>My Account</h1>
-    <div class="row justify-content-around">
-      <h2>Personal Information</h2>
-      <h2>Selected Buildings</h2>
+    <div class="row justify-content-center">
+        <h1>My Account</h1>
+    </div>
+    <div class="row">
+        <div class="col-4 justify-content-center">
+            <div class="row justify-content-center">
+                <h2>Personal Information</h2>
+            </div>
+            <div class="row justify-content-center">
+                <ul class="list-group">
+                  <li class="list-group-item">Name</li>
+                  <li class="list-group-item">Email</li>
+                  <!-- <li class="list-group-item">UGA ID</li> -->
+                </ul>
+                <ul class="list-group">
+                  <li class="list-group-item">{{request.user.display_name}}</li>
+                  <li class="list-group-item">{{request.user.email}}</li>
+                  <!-- <li class="list-group-item">nrc10711</li> -->
+                </ul>
+            </div>
+            <div class="row row-edit justify-content-center">
+              <button type="button" id="editButton" class="btn btn-secondary" data-toggle="modal" data-target="#editModal"
+                style="margin: 15px;">Edit Account</button>
+              <a href="{% url 'password_change' %}" id="editButton" class="btn btn-secondary" style="margin: 15px;"> Change
+                Password</a>
+            </div>
+        </div>
+        <div class="col-8 justify-content-center">
+            <div class="row justify-content-center">
+                <h2>Selected Buildings</h2>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col justify-content-center">
+                    <ul class="list-group">
+                        {% for bldg in building %}
+                         <form method="POST">
+                           {% csrf_token %}
+                           <!-- <li class="list-group-item"></li>{{forloop.counter }} : {{bldg.building_id}}</li> -->
+                         </form>
+                         {% endfor %}
+                         <div class="row">
+                             <div class="col-6">
+                                 <h5>Building</h5>
+                             </div>
+                             <div class="col-2">
+                                 <h5>Start Time</h5>
+                             </div>
+                             <div class="col-2">
+                                 <h5>End Time</h5>
+                             </div>
+                             <div class="col-2">
+
+                             </div>
+                         </div>
+                         {% for excur in users_excursions %}
+                         <form method="POST">
+                           {% csrf_token %}
+                           <div class="row align-items-center">
+                               <div class="col-6">
+                                   {{ excur.building_id}}
+                               </div>
+                               <div class="col-2">
+                                   {{ excur.start_time}}
+                               </div>
+                               <div class="col-2">
+                                   {{ excur.end_time}}
+                               </div>
+                               <div class="col-2">
+                                   <button class = "btn btn-danger" name="DeleteButton" value="{{ excur }}" style="margin:10px;">Delete</button>
+                               </div>
+                           </div>
+                             <!-- <ul class="list-group"> -->
+                             <!-- {{ excur.report_id}} -->
+                             <!-- {{ excur.user_id}} -->
+
+                             <!-- <li class="list-group-item">excur.report_id</li>
+                             <li class="list-group-item">excur.user_id</li>
+                             <li class="list-group-item">excur.building_id</li>
+                             <li class="list-group-item">excur.start_time</li>
+                             <li class="list-group-item">excur.end_time</li> -->
+                           </li>
+                         </form>
+                         {% endfor %}
+
+                       </ul>
+                </div>
+                 </div>
+             </div>
+        </div>
+
     </div>
 
     <!-- User's personal information -->
     <div class="row justify-content-around">
-      <div class="row justify-content-left">
-          <ul class="list-group">
-            <li class="list-group-item">Name</li>
-            <li class="list-group-item">Email</li>
-            <!-- <li class="list-group-item">UGA ID</li> -->
-          </ul>
-          <ul class="list-group">
-            <li class="list-group-item">{{request.user.display_name}}</li>
-            <li class="list-group-item">{{request.user.email}}</li>
-            <!-- <li class="list-group-item">nrc10711</li> -->
-          </ul>
-      </div>
 
-      <!-- User's selected buildings--> 
-      <div class="row justify-content-right">
-        <ul class="list-group">
-          {% for bldg in building %}
-          <form method="POST">
-            {% csrf_token %}
-            <li class="list-group-item"></li>{{forloop.counter }} : {{bldg.building_id}}</li>
-          </form>
-          {% endfor %}
-          <li class="list-group-item">placeholder2</li>
-        </ul>
-      </div>
-    </div>
-    
 
-    <div class="row row-edit">
-      <button type="button" id="editButton" class="btn btn-secondary" data-toggle="modal" data-target="#editModal"
-        style="margin: 15px;">Edit Account</button>
-      <a href="{% url 'password_change' %}" id="editButton" class="btn btn-secondary" style="margin: 15px;"> Change
-        Password</a>
+      <!-- User's selected buildings-->
+
     </div>
-     
-    
+
+
+
+
+
 
 
     <!-- for debugging -->

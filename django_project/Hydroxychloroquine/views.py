@@ -5,7 +5,7 @@ from django_email_verification import sendConfirm
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.http import HttpResponse, HttpResponseRedirect
 from .testingVars import test_buildings, test_building_names, test_reports
@@ -18,6 +18,17 @@ from . import models
 # for display purposes
 max_num_excursions = 2
 
+<<<<<<< HEAD
+=======
+def Remove_building(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'A user with this username already exists.'
+    return JsonResponse(data)
+>>>>>>> edee73ab242306380b02f4351ff965719713464a
 
 def home(request):
     print(request.method)
@@ -36,14 +47,28 @@ def data(request):
         "recent_reports": test_reports,
     }
     return render(request, "Hydroxychloroquine/data.html", context)
-    
+
 @login_required
 def account(request):
+    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions)
+
+    # userchange form
+    if request.method == "POST":
+        form_userchange = forms.CustomUserChangeForm(request.POST, instance=request.user)
+        if form_userchange.is_valid():
+            form_userchange.save(commit=True)
+            print("  ***username changed***")
+            return redirect("Hydroxychloroquine-account")
+    else:
+        form_userchange = forms.CustomUserChangeForm(instance=request.user)
 
     # formset_SelectBuilding
+<<<<<<< HEAD
     SelectBuildingFormSet = formset_factory(
         forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
     )
+=======
+>>>>>>> edee73ab242306380b02f4351ff965719713464a
     if request.method == "POST":
         formset_SelectBuilding = SelectBuildingFormSet(
             request.POST, prefix="excursions"
@@ -70,6 +95,7 @@ def account(request):
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
 
+<<<<<<< HEAD
     # userchange form
     if request.method == "POST":
         form_userchange = forms.CustomUserChangeForm(
@@ -80,6 +106,8 @@ def account(request):
             return redirect("Hydroxychloroquine-account")
     else:
         form_userchange = forms.CustomUserChangeForm(instance=request.user)
+=======
+>>>>>>> edee73ab242306380b02f4351ff965719713464a
 
     context = {
         "title": "account",
@@ -93,11 +121,12 @@ def account(request):
         "loop_max": len(formset_SelectBuilding) - 1,
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
+        "users_excursions": models.Excursion.objects.filter(user_id=request.user).filter(report_id=None),
     }
 
     return render(request, "Hydroxychloroquine/account.html", context)
 
-
+@login_required
 def reportTest(request):
     """
     models.Building.objects.all().delete()
@@ -162,7 +191,8 @@ def reportTest(request):
                     print("  ***excursion object made***")
             if report_made:
                 #finding all the building impacted
-                buildingList = [0]* 10
+                buildingList = []
+                emailList = []
                 #find the last report submitted ^
                 reportId = models.Report.objects.values_list('id').last()
                 rId = reportId[0]
@@ -171,16 +201,14 @@ def reportTest(request):
                 for x in eList:
                     temp = x
                     #getting the builing names
-                    buildingList = models.Building.objects.filter(building_id = temp).values_list('building_id', flat = True)
-                buildingList = list( dict.fromkeys(buildingList) )
+                    buildingList += list( dict.fromkeys(models.Building.objects.filter(building_id = temp).values_list('building_id', flat = True)))
                 #finding all of the users with the buildings added and effected
                 eList = models.Excursion.objects.exclude(report_id__isnull = False).values_list('user_id', flat = True)
                 eList = list( dict.fromkeys(eList) )
                 #grabbing their emails
                 for x in eList:
                     temp = x
-                    emailList = list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
-                
+                    emailList += list(models.CustomUser.objects.filter(id = temp).values_list('email', flat = True))
                 # Insert code to send email
                 send_mail("Positive COVID-19 test reported", "A positive COVID-19 test has been reported in one of the buildings you have selected", "hydroxy.app@gmail.com", emailList)
             return redirect("Hydroxychloroquine-home")
