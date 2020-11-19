@@ -51,10 +51,13 @@ def home(request):
 
 def data(request):
     print(request.method)
-
+    reports={}
+    for r in models.Report.objects.all():
+        reports[""]=""
     context = {
         "title": "data",
         "recent_reports": test_reports,
+        "reports" : reports,
     }
     return render(request, "Hydroxychloroquine/data.html", context)
 

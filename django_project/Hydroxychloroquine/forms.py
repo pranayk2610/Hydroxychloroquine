@@ -68,16 +68,55 @@ class SelectBuildingForm(django_forms.Form):
     start_time = django_forms.ChoiceField(
         label="Start Time",
         choices=time_choices,
-        # initial="12:00am",
         required=False,
     )
     end_time = django_forms.ChoiceField(
         label="End Time",
         choices=time_choices,
-        # initial="11:00pm",
         required=False,
     )
+    day_choices =(
+        ("Sunday", "Sunday"),
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+    )
+    days = django_forms.MultipleChoiceField(
+        choices=day_choices,
+        required=False,
+        )
 
+
+# class SelectBuildingForm(django_forms.Form):
+#     building_id = django_forms.ModelChoiceField(
+#         queryset=models.Building.objects.all(),
+#         # widget=forms.Select(attrs={'class': 'form-control', 'required': True})
+#         # to_field_name="building_id",
+#         # initial=models.Building.objects.first(),
+#         required=False,
+#     )
+#     times = [
+#         "{}:00{}".format(h, ap)
+#         for ap in ("am", "pm")
+#         for h in ([12] + list(range(1, 12)))
+#     ]
+#     time_choices = [(t, t) for i, t in enumerate(times, start=1)]
+#     # time_choices = [(i,t) for i,t in enumerate(times,start=1)]
+#     start_time = django_forms.ChoiceField(
+#         label="Start Time",
+#         choices=time_choices,
+#         # initial="12:00am",
+#         required=False,
+#     )
+#     end_time = django_forms.ChoiceField(
+#         label="End Time",
+#         choices=time_choices,
+#         # initial="11:00pm",
+#         required=False,
+#     )
 
 class ReportTestForm(django_forms.Form):
     # incomplete
