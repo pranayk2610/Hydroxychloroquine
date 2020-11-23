@@ -15,17 +15,12 @@ from .testingVars import test_buildings, test_building_names, test_reports
 from django.forms import formset_factory
 from . import forms
 from . import models
+from .utils import convert_to_24_hour_time
 
 # for display purposes
 max_num_excursions = 5
 
-def convert_to_24_hour_time(t):
-    if t[-2:]=='pm':
-        splits=t.split(":")
-        hour=splits[0]
-        splits[0]=str(int(hour)+12) if not int(hour)==12 else "0"
-        t=":".join(splits)
-    return t
+
 
 @require_POST
 @login_required
@@ -66,7 +61,7 @@ def data(request):
         buildingList = []
         eList = []
         buildingString = ""
-        #finding the 
+        #finding the
         eList = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=(r[x].id)).values_list("building_id_id", flat=True)))
         for n in eList:
             temp = n
