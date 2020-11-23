@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib.auth import views as auth_views
 from django_email_verification import sendConfirm
 from django.contrib import messages
@@ -7,47 +9,42 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from .testingVars import test_buildings, test_building_names, test_reports
 from django.forms import formset_factory
 from . import forms
 from . import models
 
-# from . import view_templates
-
 # for display purposes
-max_num_excursions = 2
+max_num_excursions = 5
 
 def convert_to_24_hour_time(t):
-    print("t start",t)
     if t[-2:]=='pm':
         splits=t.split(":")
         hour=splits[0]
-        splits[0]=str(int(hour)+12)
+        splits[0]=str(int(hour)+12) if not int(hour)==12 else "0"
         t=":".join(splits)
-    print("t end",t)
     return t
 
-
+@require_POST
+@login_required
 def Remove_building(request):
-    username = request.GET.get("username", None)
-    data = {
-        "is_taken": models.CustomUser.objects.filter(username__iexact=username).exists()
+    user = request.user
+    excursion_id = request.POST.get('excursion_id', None)
+    excursion = models.Excursion.objects.get(id=excursion_id)
+    if user==excursion.user_id:
+        print("  ***deleting excursion object***  excursion =",excursion )
+        excursion.delete()
+    context = {
+        'building_id': excursion_id
     }
-    if data["is_taken"]:
-        data["error_message"] = "A user with this username already exists."
-    return JsonResponse(data)
-
+    # context = {'building_id': excursion.building_id} # mabye we want to say something back?
+    # return HttpResponse(json.dumps(context), content_type='application/json') # maybe alternative method
+    return JsonResponse(context)
 
 def home(request):
-    print(request.method)
-
-    context = {
-        "title": "home",
-        "recent_reports": test_reports,
-    }
+    context = {"title": "home",}
     return render(request, "Hydroxychloroquine/home.html", context)
-
 
 def data(request):
     print(request.method)
@@ -64,15 +61,11 @@ def data(request):
 
 @login_required
 def account(request):
-    SelectBuildingFormSet = formset_factory(
-        forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
-    )
+    SelectBuildingFormSet = formset_factory(forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions)
 
     # userchange form
-    if request.method == "POST":
-        form_userchange = forms.CustomUserChangeForm(
-            request.POST, instance=request.user
-        )
+    if request.method == "POST" and 'username_change' in request.POST:
+        form_userchange = forms.CustomUserChangeForm(request.POST, instance=request.user)
         if form_userchange.is_valid():
             form_userchange.save(commit=True)
             print("  ***username changed***")
@@ -81,107 +74,55 @@ def account(request):
         form_userchange = forms.CustomUserChangeForm(instance=request.user)
 
     # formset_SelectBuilding
-    if request.method == "POST":
-        formset_SelectBuilding = SelectBuildingFormSet(
-            request.POST, prefix="excursions"
-        )
-        print("formset_SelectBuilding.is_valid():", formset_SelectBuilding.is_valid())
-        # if formset_SelectBuilding.is_valid():
+    if request.method == "POST" and 'add_buildings' in request.POST:
+        formset_SelectBuilding = SelectBuildingFormSet(request.POST, prefix="excursions")
+        formset_SelectBuilding_valid=any(form.is_valid() for form in formset_SelectBuilding)
         for form in formset_SelectBuilding:
             if form.is_valid():
                 # make excursion object
-                print("  ***creating excursion object***")
-                for f in list(form.fields):
-                    print("form.cleaned_data:", form.cleaned_data)
-                    print("field:", f, "| data=", form[f].value())
-                    # print("field:",f,"choice=", form.fields[f].choices)
-                    print("field:", f, "| cleaned data=", form.cleaned_data[f])
                 e = models.Excursion.objects.create(
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
                     start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                     end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                     )
-                print("  ***excursion object made***")
+                print("  ***excursion object made***  excursion =",e)
         return redirect("Hydroxychloroquine-account")
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
 
+    users_excursions = models.Excursion.objects.filter(user_id=request.user).filter(report_id=None)
     context = {
         "title": "account",
-        "buildings": list(models.Building.objects.all()),
-        "times": [
-            "{}:00{}".format(h, ap)
-            for ap in ("am", "pm")
-            for h in ([12] + list(range(1, 12)))
-        ],
-        "max_num_excursions_counter": range(1, 1 + max_num_excursions),
         "loop_max": len(formset_SelectBuilding) - 1,
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
-        "users_excursions": models.Excursion.objects.filter(
-            user_id=request.user
-        ).filter(report_id=None),
+        "users_excursions": users_excursions,
     }
-
     return render(request, "Hydroxychloroquine/account.html", context)
 
 
 @login_required
 def reportTest(request):
-    """
-    models.Building.objects.all().delete()
-    for i,n in enumerate(test_building_names, start=1):
-        n=str(n)
-        e = models.Building.objects.create(
-            building_id = int(i),
-            building_name = str(n),
-            )
-    """
-    # print(e)
-    # for x in models.Building.objects.all(): print(x)
-    # print(models.Building.objects.first())
-
-    # for x in models.Building.objects.all(): print(str(x.building_name))
-    # print(models.Building.objects.all().values('building_name') )
     SelectBuildingFormSet = formset_factory(
         forms.SelectBuildingForm, extra=max_num_excursions, max_num=max_num_excursions
     )
     if request.method == "POST":
-        # models.Excursion.objects.all().delete()
-        # models.Report.objects.all().delete()
         report_form = forms.ReportTestForm(request.POST)
-        formset_SelectBuilding = SelectBuildingFormSet(
-            request.POST, prefix="excursions"
-        )
-        print("report_form.is_valid():", report_form.is_valid())
-        print("formset_SelectBuilding.is_valid():", formset_SelectBuilding.is_valid())
-        report_made = False
-        if report_form.is_valid():
+        formset_SelectBuilding = SelectBuildingFormSet(request.POST, prefix="excursions")
+        SelectBuilding_valid=any(form.is_valid() for form in formset_SelectBuilding) and report_form.is_valid()
+        if SelectBuilding_valid:
+            # make report object
+            r = models.Report.objects.create(
+                user_id=request.user,
+                date_of_test=report_form.cleaned_data["date_of_test"],
+                date_last_on_campus=report_form.cleaned_data["date_of_test"],
+            )
+            print("  ***report object made***  excursion =",r)
+
+            # make excursion objects accociated with report
             for form in formset_SelectBuilding:
                 if form.is_valid():
-                    # make report if first valid form
-                    if not report_made:
-                        print("  ***creating report object***")
-                        for f in list(report_form.fields):
-                            print("field:", f, "| data=", report_form.cleaned_data[f])
-                            r = models.Report.objects.create(
-                                user_id=request.user,
-                                date_of_test=report_form.cleaned_data["date_of_test"],
-                                date_last_on_campus=report_form.cleaned_data[
-                                    "date_of_test"
-                                ],
-                            )
-                        print("  ***report object made***")
-                        report_made = True
-
-                    # make excursion object and accociate with report
-                    print("  ***creating excursion object***")
-                    for f in list(form.fields):
-                        print("form.cleaned_data:", form.cleaned_data)
-                        print("field:", f, "| data=", form[f].value())
-                        # print("field:",f,"choice=", form.fields[f].choices)
-                        print("field:", f, "| cleaned data=", form.cleaned_data[f])
                     e = models.Excursion.objects.create(
                         report_id = r,
                         user_id = request.user,
@@ -189,8 +130,10 @@ def reportTest(request):
                         start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                         end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
                         )
-                    print("  ***excursion object made***")
-            if report_made:
+                    print("  ***excursion object made***  excursion =",e)
+
+            # Send email to effected users
+            if True:
                 # finding all the building impacted
                 buildingList = []
                 emailList = []
@@ -235,19 +178,13 @@ def reportTest(request):
                 )
             return redirect("Hydroxychloroquine-home")
         else:
-            return redirect("Hydroxychloroquine-home")
+            #TODO: prevent user form navgating if report is not valid
+            pass
     else:
         report_form = forms.ReportTestForm()
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
     context = {
         "title": "account",
-        "buildings": list(models.Building.objects.all()),
-        "times": [
-            "{}:00{}".format(h, ap)
-            for ap in ("am", "pm")
-            for h in ([12] + list(range(1, 12)))
-        ],
-        "max_num_excursions_counter": range(1, 1 + max_num_excursions),
         "loop_max": len(formset_SelectBuilding) - 1,
         "report_form": report_form,
         "formset_SelectBuilding": formset_SelectBuilding,
@@ -255,32 +192,6 @@ def reportTest(request):
 
     return render(request, "Hydroxychloroquine/reportTest.html", context)
 
-
-def selectBuildings(request):
-    print("selectBuildings requested")
-
-    # if request.method == "POST":
-    #     form = forms.ReportTestForm(request.POST)
-    #     print('request.method == "POST"')
-    #     print('form.is_valid():',form.is_valid())
-    #     if form.is_valid():
-    #         # print("form.cleaned_data",form.cleaned_data)
-    #         print("***creating excursion objects***")
-    #         r = models.Excursion.objects.create(
-    #             date_of_test = form.cleaned_data['date_of_test'],
-    #             date_last_on_campus = form.cleaned_data['date_of_test'],
-    #             user_id = request.user,
-    #             )
-    #         return redirect("Hydroxychloroquine-home")
-    #     else:
-    #         return redirect("Hydroxychloroquine-account")
-    # else:
-    #     print('request.method != "POST"')
-    #     form = forms.ReportTestForm()
-    context = {
-        "title": "selectBuildings",
-    }
-    return render(request, "Hydroxychloroquine/selectBuildings.html", context)
 
 
 def signup(request):

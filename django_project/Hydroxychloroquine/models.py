@@ -66,4 +66,4 @@ class Excursion(models.Model):
     end_time = models.TimeField() # changed from DateTimeField to TimeField
 
     def __str__(self):
-        return "%s %s %s" % (self.report_id, self.start_time, self.end_time)
+        return "%s, %s, %s, %s, %s, %s" % (self.id, self.report_id, self.user_id, self.building_id, self.start_time, self.end_time)

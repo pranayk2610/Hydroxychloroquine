@@ -5,17 +5,12 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^ajax/Remove_building/$', views.Remove_building, name='Remove_building'),
+    path("ajax_remove_building/", views.Remove_building, name='ajax_remove_building'),
     path("", views.home, name="Hydroxychloroquine-home"),
     path("home/", views.home, name="Hydroxychloroquine-home"),
     path("data/", views.data, name="Hydroxychloroquine-data"),
     path("account/", views.account, name="Hydroxychloroquine-account"),
     path("reportTest/", views.reportTest, name="Hydroxychloroquine-reportTest"),
-    path(
-        "selectBuildings/",
-        views.selectBuildings,
-        name="Hydroxychloroquine-selectBuildings",
-    ),
     path("signup/", views.signup, name="Hydroxychloroquine-signup"),
     path("login/", views.login, name="Hydroxychloroquine-login"),
     path("logout/", views.logout, name="Hydroxychloroquine-logout"),
