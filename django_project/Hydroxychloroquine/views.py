@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
+from django.template import loader
 
 from django.http import HttpResponseRedirect
 from .testingVars import test_buildings, test_building_names, test_reports
@@ -48,13 +49,37 @@ def home(request):
 
 def data(request):
     print(request.method)
+    reportNum = models.Report.objects.count()
     reports={}
-    for r in models.Report.objects.all():
-        reports[""]=""
+    r = models.Report.objects.all()
+    for x in reversed(range(reportNum)):
+        tempDict = {}
+        tempDict["TestDate"]=r[x].date_of_test
+        userType = models.CustomUser.objects.values_list("user_type", flat = True).filter(id = r[x].user_id_id)
+        if userType[0] == 'O':
+            tempDict["Position"]= "Other"
+        elif userType[0] == 'STU':
+            tempDict["Position"]= "Student"
+        else:
+            tempDict["Position"]= "Staff"
+        tempDict["DateLastOnCampus"]=r[x].date_last_on_campus
+        buildingList = []
+        eList = []
+        buildingString = ""
+        #finding the 
+        eList = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=(r[x].id)).values_list("building_id_id", flat=True)))
+        for n in eList:
+            temp = n
+            buildingList +=models.Building.objects.filter( building_id=temp ).values_list("building_name", flat=True)
+        buildingList = list(dict.fromkeys(buildingList))
+        for n in buildingList:
+            buildingString += n +", "
+        buildingString= buildingString[:len(buildingString)-2]
+        tempDict["BuildingsImpacted"]= buildingString
+        reports[str(r[x].id)] = tempDict
     context = {
         "title": "data",
-        "recent_reports": test_reports,
-        "reports" : reports,
+        "recent_reports": reports,
     }
     return render(request, "Hydroxychloroquine/data.html", context)
 
@@ -137,6 +162,7 @@ def reportTest(request):
                 # finding all the building impacted
                 buildingList = []
                 emailList = []
+                usersAffected = []
                 # find the last report submitted ^
                 reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
@@ -153,16 +179,17 @@ def reportTest(request):
                         dict.fromkeys(
                             models.Building.objects.filter(
                                 building_id=temp
-                            ).values_list("building_id", flat=True)
+                            ).values_list("building_name", flat=True)
                         )
                     )
                 # finding all of the users with the buildings added and effected
-                eList = models.Excursion.objects.exclude(
-                    report_id__isnull=False
-                ).values_list("user_id", flat=True)
-                eList = list(dict.fromkeys(eList))
-                # grabbing their emails
                 for x in eList:
+                    usersAffected = models.Excursion.objects.filter(building_id_id = x).exclude(
+                    report_id__isnull=False
+                    ).values_list("user_id", flat=True)
+                usersAffected = list(dict.fromkeys(usersAffected))
+                # grabbing their emails
+                for x in usersAffected:
                     temp = x
                     emailList += list(
                         models.CustomUser.objects.filter(id=temp).values_list(
@@ -170,11 +197,18 @@ def reportTest(request):
                         )
                     )
                 # Insert code to send email
+                html_message = loader.render_to_string(
+                        'Hydroxychloroquine/report_mail.html',
+                        {
+                            'body': 'A positive COVID-19 test has been reported in one of the buildings you have selected. Please visit the website to see the buildings were affected.'
+                        }
+                    )
                 send_mail(
                     "Positive COVID-19 test reported",
-                    "A positive COVID-19 test has been reported in one of the buildings you have selected",
+                    "A positive COVID-19 test has been reported in one of the buildings you have selected. Please visit the website to see the buildings were affected.",
                     "hydroxy.app@gmail.com",
                     emailList,
+                    html_message = html_message
                 )
             return redirect("Hydroxychloroquine-home")
         else:
