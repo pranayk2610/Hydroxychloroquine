@@ -44,12 +44,6 @@ class CustomAuthenticationForm(AuthenticationForm):
         return data.lower()
 
 
-class ExcursionForm(ModelForm):
-    class Meta:
-        model = models.Excursion
-        fields = ["report_id", "user_id", "building_id", "start_time", "end_time"]
-
-
 class SelectBuildingForm(django_forms.Form):
     building_id = django_forms.ModelChoiceField(
         queryset=models.Building.objects.all(),
@@ -68,15 +62,29 @@ class SelectBuildingForm(django_forms.Form):
     start_time = django_forms.ChoiceField(
         label="Start Time",
         choices=time_choices,
-        # initial="12:00am",
         required=False,
     )
     end_time = django_forms.ChoiceField(
         label="End Time",
         choices=time_choices,
-        # initial="11:00pm",
         required=False,
     )
+    # TODO:prevent user from setting start_time >= end_time
+    # https://docs.djangoproject.com/en/3.1/ref/forms/validation/
+
+    day_choices =(
+        ("Sunday", "Sunday"),
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+    )
+    days = django_forms.MultipleChoiceField(
+        choices=day_choices,
+        required=False,
+        )
 
 
 class ReportTestForm(django_forms.Form):
@@ -102,3 +110,9 @@ class ReportTestForm(django_forms.Form):
         choices=user_type_choices,
         initial=1,
     )
+
+
+# class ExcursionForm(ModelForm): # unused
+#     class Meta:
+#         model = models.Excursion
+#         fields = ["report_id", "user_id", "building_id", "start_time", "end_time"]

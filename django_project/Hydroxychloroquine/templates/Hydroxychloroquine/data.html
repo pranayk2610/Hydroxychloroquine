@@ -37,9 +37,9 @@
           <tbody>
               <!-- recent_reports should be ordered -->
               <!-- TODO fix var names -->
-              {% for report in recent_reports %}
+              {% for key, report in recent_reports.items %}
                   <tr>
-                      <td>{{ report.DateReported }}</td>
+                      <td>{{ report.TestDate }}</td>
                       <td>{{ report.Position }}</td>
                       <td>{{ report.DateLastOnCampus }}</td>
                       <td>{{ report.BuildingsImpacted }}</td>
@@ -47,6 +47,7 @@
               {% endfor %}
           </tbody>
         </table>
+        <br>
         </div>
     </div>
 </div>
