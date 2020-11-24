@@ -169,7 +169,7 @@ def reportTest(request):
                 )
                 for x in eList:
                     temp = x
-                    # getting the builing names
+                    # getting the building names
                     buildingList += list(
                         dict.fromkeys(
                             models.Building.objects.filter(

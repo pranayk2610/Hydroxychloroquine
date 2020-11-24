@@ -4,49 +4,58 @@
 
 {{ formset_SelectBuilding.management_form }}
 {% for form in formset_SelectBuilding %}
-  {% with i=forloop.counter0 %}
-    <button type="button" id="addButton{{ i }}" class="btn btn-secondary">Add a building</button>
-    <div class="form-group" id="excursion{{ i }}">
+{% with i=forloop.counter0 %}
+<button type="button" id="addButton{{ i }}" class="btn btn-secondary">Add a building</button>
+<div class="form-group" id="excursion{{ i }}">
 
-        <label for="id_excursions-{{ i }}-building_id">Select the building</label>
-        <select name="excursions-{{ i }}-building_id" class="custom-select" id="id_excursions-{{ i }}-building_id">
-            <option selected>Choose...</option>
-            {% for building in form.building_id.field.choices %}
-                <option value="{{ building.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ building.1 }}</option>
-            {% endfor %}
-        </select>
+  <label for="id_excursions-{{ i }}-building_id">Select the building</label>
+  <select name="excursions-{{ i }}-building_id" class="custom-select" id="id_excursions-{{ i }}-building_id">
+    <option selected>Choose...</option>
+    {% for building in form.building_id.field.choices %}
+    <option value="{{ building.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ building.1 }}</option>
+    {% endfor %}
+  </select>
 
-        <label for="id_excursions-{{ i }}-start_time">From:</label>
-        <select name="excursions-{{ i }}-start_time" class="custom-select" id="id_excursions-{{ i }}-start_time">
-            <option selected>Choose...</option>
-            {% for time in form.start_time.field.choices %}
-              <option value="{{ time.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ time.1 }}</option>
-            {% endfor %}
-        </select>
+  <label>Select days</label>
+  {% for day in form.days.field.choices %}
+  <div class="form-check">
+    <input name="excursions-{{ i }}-{{ day }}" id="id_excursions-{{ i }}-{{ day }}" class="form-check-input" 
+      type="checkbox" value="{{ day.0 }}" {% if forloop.counter == -1 %} checked {% endif %}>
+    <label for="id_excursions-{{ i }}-{{ day }}" class="form-check-label">{{ day.1 }}</label>
+  </div>
+  {% endfor %}
 
-        <label for="id_excursions-{{ i }}-end_time">To:</label>
-        <select name="excursions-{{ i }}-end_time" class="custom-select" id="id_excursions-{{ i }}-end_time">
-            <option selected>Choose...</option>
-            {% for time in form.end_time.field.choices %}
-              <option value="{{ time.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ time.1 }}</option>
-            {% endfor %}
-        </select>
-    </div>
-  {% endwith %}
+  <label for="id_excursions-{{ i }}-start_time">From:</label>
+  <select name="excursions-{{ i }}-start_time" class="custom-select" id="id_excursions-{{ i }}-start_time">
+    <option selected>Choose...</option>
+    {% for time in form.start_time.field.choices %}
+    <option value="{{ time.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ time.1 }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="id_excursions-{{ i }}-end_time">To:</label>
+  <select name="excursions-{{ i }}-end_time" class="custom-select" id="id_excursions-{{ i }}-end_time">
+    <option selected>Choose...</option>
+    {% for time in form.end_time.field.choices %}
+    <option value="{{ time.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ time.1 }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endwith %}
 {% endfor %}
 
 
-    <script type="text/javascript">
-    {% for form in formset_SelectBuilding %}
-      {% with i=forloop.counter0 %}
-        $("#excursion{{ i }}").hide();
-        $("#addButton{{ i }}").hide();
-        $("#addButton{{ loop_max|sub:i }}").click(function() {
-            $("#excursion{{ loop_max|sub:i }}").show();
-            $("#addButton{{ loop_max|sub:i }}").hide();
-            $("#addButton{{ loop_max|sub:i|sub:1 }}").show();
-        });
-        {% endwith %}
-    {% endfor %}
-      $("#addButton{{loop_max}}").show();
-      </script>
+<script type="text/javascript">
+  {% for form in formset_SelectBuilding %}
+    {% with i=forloop.counter0 %}
+      $("#excursion{{ i }}").hide();
+      $("#addButton{{ i }}").hide();
+      $("#addButton{{ loop_max|sub:i }}").click(function() {
+          $("#excursion{{ loop_max|sub:i }}").show();
+          $("#addButton{{ loop_max|sub:i }}").hide();
+          $("#addButton{{ loop_max|sub:i|sub:1 }}").show();
+      });
+      {% endwith %}
+  {% endfor %}
+    $("#addButton{{loop_max}}").show();
+    </script>

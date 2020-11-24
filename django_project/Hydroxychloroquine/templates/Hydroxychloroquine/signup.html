@@ -13,6 +13,7 @@
   <input type="password" id="password" class="fadeIn third" name="login" placeholder="Create Password">
   <input type="password" id="password" class="fadeIn third" name="login" placeholder="Re-Enter Password">
   -->
+
   {%for field in form %}
   <!-- adds CSS to field labling  -->
     {% if field.label_tag %}
@@ -35,9 +36,9 @@
   {% endif %}
 <!-- Reference Login -->
 <div id="formFooter">
-  <a class="underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Already have an account?</a>
+  <a class="fadeIn fourth underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Already have an account?</a>
 </div>
 <div id="formFooter">
-  <a class="underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
+  <a class="fadeIn fourth underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
 </div>
 {% endblock content %}

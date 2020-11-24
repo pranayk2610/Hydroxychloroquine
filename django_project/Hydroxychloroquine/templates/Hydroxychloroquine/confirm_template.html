@@ -1,22 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Confirmation</title>
-    <style>
-        body {
-            color: blue;
-        }
-    </style>
-</head>
-
+{% extends "Hydroxychloroquine/dropdown_base.html" %}
+{% load static %}
+{% block content %}
 <body>
     {% if success %}
-    You have confirmed your account!
+    <h2>Thank you for verifying your email!</h2>
+    <div id="formFooter">
+        <a class="underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Click here to return to the login page</a>
+    </div>
     {% else %}
-    Error, invalid token!
+    <h2>Uh oh, it looks like there was a problem verifying your email. Please try again! </h2>
+    <div id="formFooter">
+        <a class="underlineHover" href="{% url 'Hydroxychloroquine-signup' %}"">Click here to return to the signup page</a>
+    </div>
     {% endif %}
 </body>
-
-</html>
+{% endblock content %}

@@ -1,6 +1,7 @@
 {% extends "Hydroxychloroquine/dropdown_base.html" %}
 {% load static %}
 {% block content %}
+
 <!-- Login Form -->
 <form method="POST">
   {% csrf_token %}
@@ -8,20 +9,39 @@
   <input type="text" id="myId" class="fadeIn second" name="myId" placeholder="UGA MyId">
   <input type="password" id="password" class="fadeIn third" name="login" placeholder="Password">
   -->
-  {{form}}
-  <!-- <input type="checkbox" id="RememberMe" name="RememberMe" value="{{ next }}"> -->
-  <!-- <label for="RememberMe">Remember me</label><br> -->
-  <input type="submit" class="fadeIn fourth" value="Log In">
+ <!-- {{ form }} -->
+  {% if form.non_field_errors %}
+    <div class="errors">
+      {% for err in form.non_field_errors %}
+        <h4 class="fadeIn first">{{ err }}</h3>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+ {%for field in form %}
+ <!-- adds CSS to field labling  -->
+  {% if field.label_tag %}
+    <h2 class="fadeIn second"> {{ field.label_tag }} </h2>
+  {% endif %}
+
+  <div class="fadeIn second">
+    {{ field }}
+  </div>
+    
+  
+  
+ {% endfor %}
+  <input type="submit" class="fadeIn third" value="Log In">
 </form>
 
 <!-- Forgot Password Section -->
 <div id="formFooter">
-  <a class="underlineHover" href="{% url 'password_reset' %}">Forgot your Password?</a>
+  <a class="fadeIn fourth underlineHover" href="{% url 'password_reset' %}">Forgot your Password?</a>
 </div>
 <div id="formFooter">
-  <a class="underlineHover" href="{% url 'Hydroxychloroquine-signup' %}">Create Account</a>
+  <a class="fadeIn fourth underlineHover" href="{% url 'Hydroxychloroquine-signup' %}">Create Account</a>
 </div>
 <div id="formFooter">
-  <a class="underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
+  <a class="fadeIn fourth underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
 </div>
 {% endblock content %}
