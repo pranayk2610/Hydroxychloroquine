@@ -103,6 +103,12 @@ class ReportTestForm(django_forms.Form):
         # initial=datetime.date(),
         initial=timezone.now().date(),
     )
+    date_last_on_campus = django_forms.DateField(
+        label="On what date were you last on campus?",
+        # initial=make_aware(datetime.now()).date(),
+        # initial=datetime.date(),
+        initial=timezone.now().date(),
+    )
     user_type_choices = [(1, "Student"), (2, "Faculty"), (3, "Staff"), (4, "Other")]
     user_type = django_forms.ChoiceField(
         widget=django_forms.RadioSelect(),
