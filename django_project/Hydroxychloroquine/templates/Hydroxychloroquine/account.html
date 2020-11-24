@@ -105,8 +105,7 @@
     <h4>Select which buildings and times you would like to be notified for potential covid exposure</h4>
     <form method="POST">
       {% csrf_token %}
-      <input type="submit"  name="add_buildings" value="Submit buildings">
-
+      <input type="submit" class="btn btn-secondary" name="add_buildings" value="Submit buildings">
       {% include "Hydroxychloroquine/selectBuildings.html" %}
     </form>
   </div>
