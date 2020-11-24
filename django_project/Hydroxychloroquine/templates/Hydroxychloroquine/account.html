@@ -103,6 +103,11 @@
       <!-- User's selected buildings-->
     <div class="form-group col top">
     <h4>Select which buildings and times you would like to be notified for potential covid exposure</h4>
+    <p style="color:gray">
+        Please select the buildings you are usually in during an average week, along with the time range and day range.
+        For the buildings you sign up for, you will be notified if someone reports a positive test and frequents
+        those same buildings at the same times and on the same days.
+    </p>
     <form method="POST">
       {% csrf_token %}
        {% include "Hydroxychloroquine/selectBuildings.html" %}
