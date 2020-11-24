@@ -1,13 +1,13 @@
 {% extends "Hydroxychloroquine/dropdown_base.html" %}
 {% load static %}
 {% block content %}
-<h2>You have been logged out</h2>
+<h2 class="fadeIn second">You have been logged out</h2>
 
 <!-- Forgot Password Section -->
 <div id="formFooter">
-    <a class="underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Login Again</a>
+    <a class="fadeIn fourth underlineHover" href="{% url 'Hydroxychloroquine-login' %}">Login Again</a>
 </div>
 <div id="formFooter">
-  <a class="underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
+  <a class="fadeIn fourth underlineHover" href="{% url 'Hydroxychloroquine-home' %}">Back to Home Page</a>
 </div>
 {% endblock content %}
