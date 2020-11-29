@@ -58,8 +58,8 @@ class Building(models.Model):
         return str(self.building_name)
 
 '''
-	"1" : "Sunday"
-	"7" : "Saturday"
+     "1" : "Sunday"
+     "7" : "Saturday"
 '''
 class Excursion(models.Model):
     report_id = models.ForeignKey(Report, on_delete=models.CASCADE, null=True, blank=True)
