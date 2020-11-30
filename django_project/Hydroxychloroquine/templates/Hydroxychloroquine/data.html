@@ -6,26 +6,42 @@
 {% endblock style %}
 {% block content %}
 <body>
-<div id="loadingContainer">
-    <div id="hideMe">
-        <div id="loader"></div>
+    <div id="loadingContainer">
+        <div id="hideMe">
+            <div id="loader"></div>
+        </div>
     </div>
-</div>
-
-    
-    <div class="container">
-        <div class="col justify-content-center">
-            <div>
-                <iframe src="https://covid19.biglocalnews.org/county-maps/index.html?embed=stateCounty#/county/13059" width="100%" height="950" marginheight="0" marginwidth="0" frameborder="0"></iframe>
+<div class="container">
+    <div class="col justify-content-center">
+        <div>
+            <iframe src="https://covid19.biglocalnews.org/county-maps/index.html?embed=stateCounty#/county/13059" width="100%" height="950" marginheight="0" marginwidth="0" frameborder="0"></iframe>
+        </div>
+        <div class="row">
+            <h2 class="display-15" >Test Results</h2>
+            <p class="lead">
+                Results are ordered from newest to oldest and given with general information on where the person who
+                tested positve frequents.
+            </p>
+        </div>
+        <div class="row">
+            <h5>Display positive covid tests from the following date range:</h5>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group top">
+                    <label for="dataStartDate">From:</label>
+                    <input type="date" data-provide="datepicker" id="dataStartDate" aria-describedby="dateClarification" class="form-control">
+                </div>
             </div>
-            <div class="jumbotron " style="background-color: white">
-                <h2 class="display-15" >Test Results</h1>
-                <p class="lead">
-                    Results are ordered from newest to oldest and given with general information on where the person who
-                    tested positve frequents.
-                </p>
+            <div class="col">
+                <div class="form-group top">
+                    <label for="dataEndDate">To:</label>
+                    <input type="date" data-provide="datepicker" id="dataEndDate" aria-describedby="dateClarification" class="form-control">
+                </div>
             </div>
-            <table class="table table-striped table-light justify-content-center">
+        </div>
+        <div class="row overflow-auto" style="max-height: 600px;">
+            <table class="table table-striped table-light justify-content-center overflow-auto" style="max-height: 200px;">
               <thead>
                   <tr>
                       <th width="15%">
@@ -55,8 +71,13 @@
                   {% endfor %}
               </tbody>
             </table>
-            <br>
-            </div>
+        </div>
+
+        <div class="jumbotron " style="background-color: white">
+
+        </div>
+
+        <br>
         </div>
     </div>
     <script>
@@ -66,5 +87,5 @@
             preloader.style.display = 'none';
         }
     </script>
-    </body>
+</body>
 {% endblock content %}

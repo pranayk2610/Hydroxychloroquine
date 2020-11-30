@@ -9,6 +9,9 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+import datetime  
+from datetime import date 
+import calendar 
 
 from django.http import HttpResponseRedirect
 from .testingVars import test_buildings, test_building_names, test_reports
@@ -61,8 +64,9 @@ def data(request):
         buildingList = []
         eList = []
         buildingString = ""
-        #finding the
+        #finding the buildings impacted
         eList = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=(r[x].id)).values_list("building_id_id", flat=True)))
+        #adding the building names into a list
         for n in eList:
             temp = n
             buildingList +=models.Building.objects.filter( building_id=temp ).values_list("building_name", flat=True)
@@ -136,7 +140,7 @@ def reportTest(request):
             r = models.Report.objects.create(
                 user_id=request.user,
                 date_of_test=report_form.cleaned_data["date_of_test"],
-                date_last_on_campus=report_form.cleaned_data["date_of_test"],
+                date_last_on_campus=report_form.cleaned_data["date_last_on_campus"],
             )
             print("  ***report object made***  excursion =",r)
 
@@ -154,40 +158,38 @@ def reportTest(request):
 
             # Send email to effected users
             if True:
-                # finding all the building impacted
                 buildingList = []
                 emailList = []
-                usersAffected = []
-                # find the last report submitted ^
+                # find the last report submitted and the ID of the report
                 reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
-                # adding the buildings impacted in that report^
-                eList = list(
+                # finding the buildings that are connected to the report
+                buildingsImpacted = list(
                     models.Excursion.objects.filter(report_id_id=rId).values_list(
                         "building_id_id", flat=True
                     )
                 )
-                for x in eList:
-                    temp = x
-                    # getting the building names
-                    buildingList += list(
-                        dict.fromkeys(
-                            models.Building.objects.filter(
-                                building_id=temp
-                            ).values_list("building_name", flat=True)
-                        )
-                    )
-                # finding all of the users with the buildings added and effected
-                for x in eList:
-                    usersAffected = models.Excursion.objects.filter(building_id_id = x).exclude(
-                    report_id__isnull=False
-                    ).values_list("user_id", flat=True)
-                usersAffected = list(dict.fromkeys(usersAffected))
+                #looping over the buildings impacted
+                for x in range(len(buildingsImpacted)):
+                    #find the days from the days_selected
+                    daysImpacted = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=rId, 
+                    building_id_id = buildingsImpacted[x]).exclude(
+                    report_id__isnull=True
+                    ).values_list("days_selected", flat=True)))
+                    
+                    #loop to single out the users impacted on day and in that building
+                    for y in daysImpacted[0]:
+                        usersAffected += models.Excursion.objects.filter(building_id_id = buildingsImpacted[x], 
+                        days_selected__contains = y
+                        ).exclude(
+                        report_id__isnull=False
+                        ).values_list("user_id", flat=True)
+                    usersAffected = list(dict.fromkeys(usersAffected))
+
                 # grabbing their emails
                 for x in usersAffected:
-                    temp = x
                     emailList += list(
-                        models.CustomUser.objects.filter(id=temp).values_list(
+                        models.CustomUser.objects.filter(id=x).values_list(
                             "email", flat=True
                         )
                     )
@@ -329,3 +331,10 @@ def passwordChangeDone(request, *args, **kwargs):
         template_name="Hydroxychloroquine/passwordChangeDone.html"
     )
     return customRender(request, *args, **kwargs)
+
+#from https://www.geeksforgeeks.org/python-program-to-find-day-of-the-week-for-a-given-date/
+def findDay(date): 
+    date = str(date)
+    year, month, day = (int(i) for i in date.split('-'))     
+    born = datetime.date(year, month, day) 
+    return born.strftime("%A") 
