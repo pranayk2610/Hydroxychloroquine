@@ -24,7 +24,7 @@ from django.utils.dateparse import parse_time
 
 
 # for display purposes
-max_num_excursions = 5
+max_num_excursions = 1
 
 @require_POST
 @login_required
@@ -149,13 +149,13 @@ def account(request):
         formset_SelectBuilding = SelectBuildingFormSet(request.POST, prefix="excursions")
         formset_SelectBuilding_valid=any(form.is_valid() for form in formset_SelectBuilding)
         for form in formset_SelectBuilding:
-            if form.is_valid():
-                # make excursion object
+            if form.is_valid() and len(form.cleaned_data['days_selected']):
                 e = models.Excursion.objects.create(
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
                     start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                     end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                    days_selected = "".join(form.cleaned_data['days_selected']),
                     )
                 print("  ***excursion object made***  excursion =",e)
         return redirect("Hydroxychloroquine-account")

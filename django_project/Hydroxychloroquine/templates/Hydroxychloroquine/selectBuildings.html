@@ -12,24 +12,26 @@
   <select name="excursions-{{ i }}-building_id" class="custom-select" id="id_excursions-{{ i }}-building_id">
     <option selected>Choose...</option>
     {% for building in form.building_id.field.choices %}
-    <option value="{{ building.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ building.1 }}</option>
+    <option value="{{ building.0 }}" {% if forloop.counter == 2 %} selected {% endif %}>{{ building.1 }}</option>
     {% endfor %}
   </select>
 
-  <label>Select days</label>
-  {% for day in form.days.field.choices %}
-  <div class="form-check">
-    <input name="excursions-{{ i }}-{{ day }}" id="id_excursions-{{ i }}-{{ day }}" class="form-check-input" 
-      type="checkbox" value="{{ day.0 }}" {% if forloop.counter == -1 %} checked {% endif %}>
-    <label for="id_excursions-{{ i }}-{{ day }}" class="form-check-label">{{ day.1 }}</label>
+  <!-- <label>Select days</label> -->
+  <div id="id_excursions-{{ i }}-days_selected">
+    {% for day in form.days_selected.field.choices %}
+    <div class="form-check" >
+      <label class="form-check-label" for="id_excursions-{{ i }}-days_selected_{{forloop.counter0}}">
+      <input type="checkbox" class="form-check-input" name="excursions-{{ i }}-days_selected" value="{{ day.0 }}" id="id_excursions-{{ i }}-days_selected_{{forloop.counter0}}"
+         {% if forloop.counter == 1 %} checked {% endif %}>
+      {{ day.1 }}</label></div>
+    {% endfor %}
   </div>
-  {% endfor %}
 
   <label for="id_excursions-{{ i }}-start_time">From:</label>
   <select name="excursions-{{ i }}-start_time" class="custom-select" id="id_excursions-{{ i }}-start_time">
     <option selected>Choose...</option>
     {% for time in form.start_time.field.choices %}
-    <option value="{{ time.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ time.1 }}</option>
+      <option value="{{ time.0 }}" {% if forloop.counter == 1 %} selected {% endif %}>{{ time.1 }}</option>
     {% endfor %}
   </select>
 
@@ -37,7 +39,7 @@
   <select name="excursions-{{ i }}-end_time" class="custom-select" id="id_excursions-{{ i }}-end_time">
     <option selected>Choose...</option>
     {% for time in form.end_time.field.choices %}
-    <option value="{{ time.0 }}" {% if forloop.counter == -1 %} selected {% endif %}>{{ time.1 }}</option>
+      <option value="{{ time.0 }}" {% if forloop.counter == 1 %} selected {% endif %}>{{ time.1 }}</option>
     {% endfor %}
   </select>
 </div>
