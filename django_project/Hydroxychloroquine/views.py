@@ -9,9 +9,9 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
-import datetime  
-from datetime import date 
-import calendar 
+import datetime
+from datetime import date
+import calendar
 
 from django.http import HttpResponseRedirect
 from .testingVars import test_buildings, test_building_names, test_reports
@@ -24,6 +24,31 @@ from .utils import convert_to_24_hour_time
 max_num_excursions = 5
 
 
+@require_POST
+@login_required
+def update_building_days(request):
+    def toggle_day(excursion,day):
+        if day in excursion.days_selected:
+            print("  ***removing day from excursion object***  excursion = {}, day = {}".format(excursion,day))
+            excursion.days_selected = excursion.days_selected.replace(day,"")
+        else:
+            print("  ***adding day to excursion object***  excursion = {}, day = {}".format(excursion,day))
+            excursion.days_selected = excursion.days_selected + day
+        excursion.save()
+        
+    user = request.user
+    excursion_id_day = request.POST.get('excursion_id_day', None)
+    excursion_id, day =excursion_id_day.split("_")
+    excursion = models.Excursion.objects.get(id=excursion_id)
+    if user==excursion.user_id:
+        toggle_day(excursion,day)
+
+    context = {
+        'building_id': excursion_id
+    }
+    # context = {'building_id': excursion.building_id} # mabye we want to say something back?
+    # return HttpResponse(json.dumps(context), content_type='application/json') # maybe alternative method
+    return JsonResponse(context)
 
 @require_POST
 @login_required
@@ -172,14 +197,14 @@ def reportTest(request):
                 #looping over the buildings impacted
                 for x in range(len(buildingsImpacted)):
                     #find the days from the days_selected
-                    daysImpacted = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=rId, 
+                    daysImpacted = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=rId,
                     building_id_id = buildingsImpacted[x]).exclude(
                     report_id__isnull=True
                     ).values_list("days_selected", flat=True)))
-                    
+
                     #loop to single out the users impacted on day and in that building
                     for y in daysImpacted[0]:
-                        usersAffected += models.Excursion.objects.filter(building_id_id = buildingsImpacted[x], 
+                        usersAffected += models.Excursion.objects.filter(building_id_id = buildingsImpacted[x],
                         days_selected__contains = y
                         ).exclude(
                         report_id__isnull=False
@@ -333,8 +358,8 @@ def passwordChangeDone(request, *args, **kwargs):
     return customRender(request, *args, **kwargs)
 
 #from https://www.geeksforgeeks.org/python-program-to-find-day-of-the-week-for-a-given-date/
-def findDay(date): 
+def findDay(date):
     date = str(date)
-    year, month, day = (int(i) for i in date.split('-'))     
-    born = datetime.date(year, month, day) 
-    return born.strftime("%A") 
+    year, month, day = (int(i) for i in date.split('-'))
+    born = datetime.date(year, month, day)
+    return born.strftime("%A")
