@@ -19,10 +19,34 @@ from django.forms import formset_factory
 from . import forms
 from . import models
 from .utils import convert_to_24_hour_time
+from django.utils.dateparse import parse_time
+
+
 
 # for display purposes
 max_num_excursions = 5
 
+@require_POST
+@login_required
+def update_building_times(request):
+    user = request.user
+    excursion_id = request.POST.get('excursion_id', None)
+    new_time = request.POST.get('new_time', None)
+    parsed_new_time=parse_time(new_time)
+    start = request.POST.get('start', None)
+    excursion = models.Excursion.objects.get(id=excursion_id)
+    if user==excursion.user_id:
+        if start == 'True': # modify start_time
+            print("  ***modifying start_time day from excursion object***  excursion = {}, new_time = {}".format(excursion,parsed_new_time))
+            excursion.start_time = parsed_new_time
+        else: # modify end_time
+            print("  ***modifying end_time day from excursion object***  excursion = {}, new_time = {}".format(excursion,parsed_new_time))
+            excursion.end_time = parsed_new_time
+        excursion.save()
+    context = {
+        'building_id': excursion_id
+    }
+    return JsonResponse(context)
 
 @require_POST
 @login_required
@@ -35,7 +59,7 @@ def update_building_days(request):
             print("  ***adding day to excursion object***  excursion = {}, day = {}".format(excursion,day))
             excursion.days_selected = excursion.days_selected + day
         excursion.save()
-        
+
     user = request.user
     excursion_id_day = request.POST.get('excursion_id_day', None)
     excursion_id, day =excursion_id_day.split("_")
@@ -46,8 +70,6 @@ def update_building_days(request):
     context = {
         'building_id': excursion_id
     }
-    # context = {'building_id': excursion.building_id} # mabye we want to say something back?
-    # return HttpResponse(json.dumps(context), content_type='application/json') # maybe alternative method
     return JsonResponse(context)
 
 @require_POST
@@ -140,6 +162,14 @@ def account(request):
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
 
+    # need to pass time choices directly
+    times = [
+        "{}:00{}".format(h, ap)
+        for ap in ("am", "pm")
+        for h in ([12] + list(range(1, 12)))
+    ]
+    time_choices = [(t, parse_time(convert_to_24_hour_time(t))) for i, t in enumerate(times, start=1)]
+
     users_excursions = models.Excursion.objects.filter(user_id=request.user).filter(report_id=None)
     context = {
         "title": "account",
@@ -147,6 +177,7 @@ def account(request):
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
         "users_excursions": users_excursions,
+        "time_choices": time_choices,
     }
     return render(request, "Hydroxychloroquine/account.html", context)
 
