@@ -24,7 +24,7 @@ from django.utils.dateparse import parse_time
 
 
 # for display purposes
-max_num_excursions = 1
+max_num_excursions = 3
 
 @require_POST
 @login_required
@@ -203,12 +203,15 @@ def reportTest(request):
             # make excursion objects accociated with report
             for form in formset_SelectBuilding:
                 if form.is_valid():
+                    days_array = form.cleaned_data['days_selected']
+                    days_string = ''.join(days_array)
                     e = models.Excursion.objects.create(
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
                         start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                         end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                        days_selected = days_string,
                         )
                     print("  ***excursion object made***  excursion =",e)
 
@@ -216,6 +219,7 @@ def reportTest(request):
             if True:
                 buildingList = []
                 emailList = []
+                usersAffected = []
                 # find the last report submitted and the ID of the report
                 reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
