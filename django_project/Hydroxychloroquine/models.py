@@ -7,9 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 
 
-class Role(models.Model):
-    role_id = models.IntegerField(primary_key=True)
-    role_name = models.CharField(max_length=128)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -27,8 +24,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     # add UserType to this
     user_type = models.CharField(max_length=3, choices=UserType.choices, default="STU")
-
-    roles = models.ManyToManyField(Role)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
