@@ -24,7 +24,7 @@ from django.utils.dateparse import parse_time
 
 
 # for display purposes
-max_num_excursions = 1
+max_num_excursions = 3
 
 @require_POST
 @login_required
@@ -104,14 +104,12 @@ def data(request):
     print(request.method)
     reportNum = models.Report.objects.count()
     reports={}
-    r = models.Report.objects.all()
+    r = models.Report.objects.all().order_by('date_of_test')
     for x in reversed(range(reportNum)):
         tempDict = {}
         tempDict["TestDate"]=r[x].date_of_test.strftime("%m/%d/%Y")
         userType = models.CustomUser.objects.values_list("user_type", flat = True).filter(id = r[x].user_id_id)
-        if userType[0] == 'O':
-            tempDict["Position"]= "Other"
-        elif userType[0] == 'STU':
+        if userType[0] == 'STU':
             tempDict["Position"]= "Student"
         else:
             tempDict["Position"]= "Staff"
@@ -225,6 +223,7 @@ def reportTest(request):
             if True:
                 buildingList = []
                 emailList = []
+                usersAffected = []
                 # find the last report submitted and the ID of the report
                 reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
