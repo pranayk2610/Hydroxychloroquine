@@ -96,7 +96,7 @@ def data(request):
     print(request.method)
     reportNum = models.Report.objects.count()
     reports={}
-    r = models.Report.objects.all()
+    r = models.Report.objects.all().order_by('date_of_test')
     for x in reversed(range(reportNum)):
         tempDict = {}
         tempDict["TestDate"]=r[x].date_of_test
