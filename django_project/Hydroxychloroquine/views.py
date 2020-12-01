@@ -101,9 +101,7 @@ def data(request):
         tempDict = {}
         tempDict["TestDate"]=r[x].date_of_test
         userType = models.CustomUser.objects.values_list("user_type", flat = True).filter(id = r[x].user_id_id)
-        if userType[0] == 'O':
-            tempDict["Position"]= "Other"
-        elif userType[0] == 'STU':
+        if userType[0] == 'STU':
             tempDict["Position"]= "Student"
         else:
             tempDict["Position"]= "Staff"

@@ -16,7 +16,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class UserType(models.TextChoices):
         STUDENT: "STU"
         STAFF: "STA"
-        OTHER: "O"
 
     display_name = models.CharField(max_length=128, default="")
     email = models.EmailField(_("email address"), unique=True)
@@ -27,7 +26,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     # add UserType to this
-    user_type = models.CharField(max_length=3, choices=UserType.choices, default="O")
+    user_type = models.CharField(max_length=3, choices=UserType.choices, default="STU")
 
     roles = models.ManyToManyField(Role)
 
