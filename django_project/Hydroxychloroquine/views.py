@@ -89,6 +89,14 @@ def Remove_building(request):
     return JsonResponse(context)
 
 def home(request):
+    # request.user.first_login=True # for testing redirection
+    try:
+        if request.user.first_login:
+            request.user.first_login=False
+            request.user.save()
+            return redirect("Hydroxychloroquine-account")
+    except:
+        pass
     context = {"title": "home",}
     return render(request, "Hydroxychloroquine/home.html", context)
 
@@ -99,7 +107,7 @@ def data(request):
     r = models.Report.objects.all()
     for x in reversed(range(reportNum)):
         tempDict = {}
-        tempDict["TestDate"]=r[x].date_of_test
+        tempDict["TestDate"]=r[x].date_of_test.strftime("%m/%d/%Y")
         userType = models.CustomUser.objects.values_list("user_type", flat = True).filter(id = r[x].user_id_id)
         if userType[0] == 'O':
             tempDict["Position"]= "Other"
@@ -107,7 +115,7 @@ def data(request):
             tempDict["Position"]= "Student"
         else:
             tempDict["Position"]= "Staff"
-        tempDict["DateLastOnCampus"]=r[x].date_last_on_campus
+        tempDict["DateLastOnCampus"]=r[x].date_last_on_campus.strftime("%m/%d/%Y")
         buildingList = []
         eList = []
         buildingString = ""
@@ -202,13 +210,14 @@ def reportTest(request):
 
             # make excursion objects accociated with report
             for form in formset_SelectBuilding:
-                if form.is_valid():
+                if form.is_valid() and len(form.cleaned_data['days_selected']):
                     e = models.Excursion.objects.create(
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
                         start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                         end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                        days_selected = "".join(form.cleaned_data['days_selected']),
                         )
                     print("  ***excursion object made***  excursion =",e)
 
@@ -278,7 +287,6 @@ def reportTest(request):
     }
 
     return render(request, "Hydroxychloroquine/reportTest.html", context)
-
 
 
 def signup(request):
