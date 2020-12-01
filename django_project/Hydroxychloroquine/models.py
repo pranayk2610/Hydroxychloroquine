@@ -16,7 +16,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class UserType(models.TextChoices):
         STUDENT: "STU"
         STAFF: "STA"
-        OTHER: "O"
 
     display_name = models.CharField(max_length=128, default="")
     email = models.EmailField(_("email address"), unique=True)
@@ -27,7 +26,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     # add UserType to this
-    user_type = models.CharField(max_length=3, choices=UserType.choices, default="O")
+    user_type = models.CharField(max_length=3, choices=UserType.choices, default="STU")
 
     roles = models.ManyToManyField(Role)
 
@@ -57,16 +56,20 @@ class Building(models.Model):
         # return "%s %s" % (self.building_id, self.building_name)
         return str(self.building_name)
 
-'''
-     "1" : "Sunday"
-     "7" : "Saturday"
-'''
+
 class Excursion(models.Model):
+    '''
+    Key for days_selected:
+         "1" : "Sunday"
+         "7" : "Saturday"
+    '''
     report_id = models.ForeignKey(Report, on_delete=models.CASCADE, null=True, blank=True)
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     building_id = models.ForeignKey(Building, on_delete=models.CASCADE)
     start_time = models.TimeField() # changed from DateTimeField to TimeField
     end_time = models.TimeField() # changed from DateTimeField to TimeField
-    days_selected = models.CharField(max_length=128, default = '1')
+    days_selected = models.CharField(max_length=128,
+                                     # default = '1'
+                                     )
     def __str__(self):
         return "%s, %s, %s, %s, %s, %s" % (self.id, self.report_id, self.user_id, self.building_id, self.start_time, self.end_time)

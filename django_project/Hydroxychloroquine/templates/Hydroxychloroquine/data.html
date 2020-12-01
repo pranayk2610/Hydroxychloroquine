@@ -3,15 +3,21 @@
 {% block style %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'Hydroxychloroquine/homeStyle.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" /> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 {% endblock style %}
 {% block content %}
 <body>
-    <div id="loadingContainer">
-        <div id="hideMe">
-            <div id="loader"></div>
-        </div>
-    </div>
-<div class="container">
+  <div id="loadingContainer">
+      <div id="hideMe">
+          <div id="loader"></div>
+      </div>
+  </div>
+  <div class="container">
     <div class="col justify-content-center">
         <div>
             <iframe src="https://covid19.biglocalnews.org/county-maps/index.html?embed=stateCounty#/county/13059" width="100%" height="950" marginheight="0" marginwidth="0" frameborder="0"></iframe>
@@ -41,7 +47,7 @@
             </div>
         </div>
         <div class="row overflow-auto" style="max-height: 600px;">
-            <table class="table table-striped table-light justify-content-center overflow-auto" style="max-height: 200px;">
+            <table class="table table-striped table-light justify-content-center overflow-auto" style="max-height: 200px;" id="datatable">
               <thead>
                   <tr>
                       <th width="15%">
@@ -80,12 +86,47 @@
         <br>
         </div>
     </div>
-    <script>
-        var preloader = document.getElementById('loader');
-        function handler(){
-            console.log("working");
-            preloader.style.display = 'none';
+
+
+  <script>
+    var preloader = document.getElementById('loader');
+    function handler(){
+        console.log("working");
+        preloader.style.display = 'none';
+    }
+
+    // parse a date in yyyy-mm-dd format
+    function parseDate(input) {
+      if (input === null || input === ""){return null;}
+      var parts = input.match(/(\d+)/g);
+      // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+      return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+    }
+
+   // https://jsfiddle.net/bindrid/2bkbx2y3/6/
+   $(document).ready(function(){
+      var table = $('#datatable').DataTable();
+
+      // Event listener to the two range filtering inputs to redraw on input
+      $('#dataStartDate, #dataEndDate').change(function () {
+          table.draw();
+      });
+
+      $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = parseDate($('#dataStartDate').val());
+            var max = parseDate($('#dataEndDate').val());
+            var startDate = new Date(data[0]);
+            // console.log("data",min,max,startDate);
+            if (min == null && max == null) { return true; }
+            if (min == null && startDate <= max) { return true;}
+            if (max == null && startDate >= min) {return true;}
+            if (startDate <= max && startDate >= min) { return true; }
+            return false;
         }
-    </script>
+        );
+      // table.draw();
+      });
+  </script>
 </body>
 {% endblock content %}
