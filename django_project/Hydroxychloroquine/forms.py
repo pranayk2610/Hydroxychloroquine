@@ -72,17 +72,18 @@ class SelectBuildingForm(django_forms.Form):
     # TODO:prevent user from setting start_time >= end_time
     # https://docs.djangoproject.com/en/3.1/ref/forms/validation/
 
-    day_choices =(
-        ("Sunday", "Sunday"),
-        ("Monday", "Monday"),
-        ("Tuesday", "Tuesday"),
-        ("Wednesday", "Wednesday"),
-        ("Thursday", "Thursday"),
-        ("Friday", "Friday"),
-        ("Saturday", "Saturday"),
+    days_choices =(
+        ("1", "Sunday"),
+        ("2", "Monday"),
+        ("3", "Tuesday"),
+        ("4", "Wednesday"),
+        ("5", "Thursday"),
+        ("6", "Friday"),
+        ("7", "Saturday"),
     )
-    days = django_forms.MultipleChoiceField(
-        choices=day_choices,
+    days_selected = django_forms.MultipleChoiceField(
+        widget=django_forms.CheckboxSelectMultiple,
+        choices=days_choices,
         required=False,
         )
 

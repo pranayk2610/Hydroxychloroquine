@@ -65,10 +65,10 @@
                   <h2>Selected Buildings</h2>
               </div>
               <div class="row justify-content-center">
-                  <div class="col justify-content-center">
+                  <div class="col justify-content-center overflow-auto" style="max-height: 200px;">
                       <ul class="list-group">
                           <div class="row">
-                             <div class="col-6">
+                             <div class="col-2">
                                  <h5>Building</h5>
                              </div>
                              <div class="col-2">
@@ -83,9 +83,38 @@
                           </div>
                           {% for excur in users_excursions %}
                           <div class="row align-items-center" id="cur_excursion{{ excur.id }}">
-                              <div class="col-6"> {{ excur.building_id}} </div>
-                              <div class="col-2"> {{ excur.start_time}} </div>
-                              <div class="col-2"> {{ excur.end_time}} </div>
+                              <div class="col-2"> {{ excur.building_id}} </div>
+
+                              <!-- Days -->
+                              {% with '1 2 3 4 5 6 7' as days %}
+                                {% for day in days.split %}
+                                <div class="col">
+                                  <input name="{{ excur.id }}_{{ day }}" id="update_days{{ excur.id }}_{{ day }}" class="form-check-input"
+                                    type="checkbox" value="{{ day }}" {% if day in excur.days_selected %} checked {% endif %}>
+                                  <!-- <label for="update_days{{ excur.id }}_{{ day }}" class="form-check-label">{{ day }}</label> -->
+                                </div>
+                                {% endfor %}
+                              {% endwith %}
+
+                              <!-- Times -->
+                              <!-- <label for="update_times{{ excur.id }}_start">From:</label> -->
+                              <div class="col">
+                                <select name="{{ excur.id }}" class="" id="update_times{{ excur.id }}_start" onchange="update_times{{ excur.id }}_start_fun(this)">
+                                  {% for time in time_choices %}
+                                    <option value="{{ time.0 }}" {% if time.1 == excur.start_time %} selected {% endif %}>{{ time.0 }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <!-- <label for="update_times{{ excur.id }}_end">To:</label> -->
+                              <div class="col">
+                                <select name="{{ excur.id }}" class="" id="update_times{{ excur.id }}_end" onchange="update_times{{ excur.id }}_end_fun(this)">
+                                  {% for time in time_choices %}
+                                    <option value="{{ time.0 }}" {% if time.1 == excur.end_time %} selected {% endif %}>{{ time.0 }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <!-- <div class="col-2"> {{ excur.start_time }} </div> -->
+                              <!-- <div class="col-2"> {{ excur.end_time }} </div> -->
                               <div class="col-2">
                                  <input type="button" class="btn btn-danger" id="remove_building{{ excur.id }}"
                                    name="{{excur.id}}" value="Delete" style="margin:10px;" />
@@ -125,6 +154,10 @@
   if(!!window.performance && window.performance.navigation.type == 2){
       window.location.reload();
   }
+
+  function blah(element){
+    $("#cur_excursion96").hide();
+  };
   // based on https://stackoverflow.com/questions/14007453/my-own-like-button-django-ajax-how
   {% for excur in users_excursions %}
     $('#remove_building{{ excur.id }}').click(function(){
@@ -146,6 +179,62 @@
         }
       });
     });
+    // document.getElementById("update_times{{ excur.id }}_start").onchange = function() {update_times()};
+    function update_times{{ excur.id }}_start_fun(){
+      // $("#cur_excursion{{ excur.id }}").hide();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'ajax_update_times' %}",
+        data: {
+          'excursion_id': $(update_times{{ excur.id }}_start).attr('name'),
+          'new_time': $(update_times{{ excur.id }}_start).val(),
+          'csrfmiddlewaretoken': '{{ csrf_token }}',
+          'start':'True',
+        },
+        dataType: "json",
+        success: function(response) {
+              // $("#cur_excursion{{ excur.id }}").hide();
+        },
+        error: function(rs, e) {
+              alert('Error: Failed to update start_time. Please try refreshing Page');
+        }
+      });
+    };
+    function update_times{{ excur.id }}_end_fun(){
+      $.ajax({
+        type: "POST",
+        url: "{% url 'ajax_update_times' %}",
+        data: {
+          'excursion_id': $(update_times{{ excur.id }}_end).attr('name'),
+          'new_time': $(update_times{{ excur.id }}_end).val(),
+          'csrfmiddlewaretoken': '{{ csrf_token }}',
+          'start':"False",
+        },
+        dataType: "json",
+        success: function(response) {},
+        error: function(rs, e) {
+              alert('Error: Failed to update end_time. Please try refreshing Page');
+        }
+      });
+    };
+    {% with '1 2 3 4 5 6 7' as days %}
+      {% for day in days.split %}
+        $('#update_days{{ excur.id }}_{{ day }}').click(function(){
+          $.ajax({
+            type: "POST",
+            url: "{% url 'ajax_update_days' %}",
+            data: {
+              'excursion_id_day': $(this).attr('name'),
+              'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: "json",
+            error: function(rs, e) {
+                  alert('Error: Failed to update day. Please try refreshing Page');
+            }
+          });
+        });
+      {% endfor %}
+    {% endwith %}
   {% endfor %}
 </script>
 {% endblock content %}

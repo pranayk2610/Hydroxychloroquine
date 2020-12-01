@@ -9,6 +9,9 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+import datetime
+from datetime import date
+import calendar
 
 from django.http import HttpResponseRedirect
 from .testingVars import test_buildings, test_building_names, test_reports
@@ -16,11 +19,58 @@ from django.forms import formset_factory
 from . import forms
 from . import models
 from .utils import convert_to_24_hour_time
+from django.utils.dateparse import parse_time
+
+
 
 # for display purposes
-max_num_excursions = 5
+max_num_excursions = 3
 
+@require_POST
+@login_required
+def update_building_times(request):
+    user = request.user
+    excursion_id = request.POST.get('excursion_id', None)
+    new_time = request.POST.get('new_time', None)
+    parsed_new_time=parse_time(new_time)
+    start = request.POST.get('start', None)
+    excursion = models.Excursion.objects.get(id=excursion_id)
+    if user==excursion.user_id:
+        if start == 'True': # modify start_time
+            print("  ***modifying start_time day from excursion object***  excursion = {}, new_time = {}".format(excursion,parsed_new_time))
+            excursion.start_time = parsed_new_time
+        else: # modify end_time
+            print("  ***modifying end_time day from excursion object***  excursion = {}, new_time = {}".format(excursion,parsed_new_time))
+            excursion.end_time = parsed_new_time
+        excursion.save()
+    context = {
+        'building_id': excursion_id
+    }
+    return JsonResponse(context)
 
+@require_POST
+@login_required
+def update_building_days(request):
+    def toggle_day(excursion,day):
+        if day in excursion.days_selected:
+            print("  ***removing day from excursion object***  excursion = {}, day = {}".format(excursion,day))
+            excursion.days_selected = excursion.days_selected.replace(day,"")
+        else:
+            print("  ***adding day to excursion object***  excursion = {}, day = {}".format(excursion,day))
+            excursion.days_selected = excursion.days_selected + day
+        excursion.save()
+
+    user = request.user
+    excursion_id_day = request.POST.get('excursion_id_day', None)
+    excursion_id, day =excursion_id_day.split("_")
+    excursion = models.Excursion.objects.get(id=excursion_id)
+    if user==excursion.user_id:
+        toggle_day(excursion,day)
+
+    context = {
+        'building_id': excursion_id
+    }
+    return JsonResponse(context)
 
 @require_POST
 @login_required
@@ -46,7 +96,7 @@ def data(request):
     print(request.method)
     reportNum = models.Report.objects.count()
     reports={}
-    r = models.Report.objects.all()
+    r = models.Report.objects.all().order_by('date_of_test')
     for x in reversed(range(reportNum)):
         tempDict = {}
         tempDict["TestDate"]=r[x].date_of_test
@@ -61,8 +111,9 @@ def data(request):
         buildingList = []
         eList = []
         buildingString = ""
-        #finding the
+        #finding the buildings impacted
         eList = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=(r[x].id)).values_list("building_id_id", flat=True)))
+        #adding the building names into a list
         for n in eList:
             temp = n
             buildingList +=models.Building.objects.filter( building_id=temp ).values_list("building_name", flat=True)
@@ -98,18 +149,26 @@ def account(request):
         formset_SelectBuilding = SelectBuildingFormSet(request.POST, prefix="excursions")
         formset_SelectBuilding_valid=any(form.is_valid() for form in formset_SelectBuilding)
         for form in formset_SelectBuilding:
-            if form.is_valid():
-                # make excursion object
+            if form.is_valid() and len(form.cleaned_data['days_selected']):
                 e = models.Excursion.objects.create(
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
                     start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                     end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                    days_selected = "".join(form.cleaned_data['days_selected']),
                     )
                 print("  ***excursion object made***  excursion =",e)
         return redirect("Hydroxychloroquine-account")
     else:
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
+
+    # need to pass time choices directly
+    times = [
+        "{}:00{}".format(h, ap)
+        for ap in ("am", "pm")
+        for h in ([12] + list(range(1, 12)))
+    ]
+    time_choices = [(t, parse_time(convert_to_24_hour_time(t))) for i, t in enumerate(times, start=1)]
 
     users_excursions = models.Excursion.objects.filter(user_id=request.user).filter(report_id=None)
     context = {
@@ -118,6 +177,7 @@ def account(request):
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
         "users_excursions": users_excursions,
+        "time_choices": time_choices,
     }
     return render(request, "Hydroxychloroquine/account.html", context)
 
@@ -136,58 +196,60 @@ def reportTest(request):
             r = models.Report.objects.create(
                 user_id=request.user,
                 date_of_test=report_form.cleaned_data["date_of_test"],
-                date_last_on_campus=report_form.cleaned_data["date_of_test"],
+                date_last_on_campus=report_form.cleaned_data["date_last_on_campus"],
             )
             print("  ***report object made***  excursion =",r)
 
             # make excursion objects accociated with report
             for form in formset_SelectBuilding:
                 if form.is_valid():
+                    days_array = form.cleaned_data['days_selected']
+                    days_string = ''.join(days_array)
                     e = models.Excursion.objects.create(
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
                         start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
                         end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                        days_selected = days_string,
                         )
                     print("  ***excursion object made***  excursion =",e)
 
             # Send email to effected users
             if True:
-                # finding all the building impacted
                 buildingList = []
                 emailList = []
                 usersAffected = []
-                # find the last report submitted ^
+                # find the last report submitted and the ID of the report
                 reportId = models.Report.objects.values_list("id").last()
                 rId = reportId[0]
-                # adding the buildings impacted in that report^
-                eList = list(
+                # finding the buildings that are connected to the report
+                buildingsImpacted = list(
                     models.Excursion.objects.filter(report_id_id=rId).values_list(
                         "building_id_id", flat=True
                     )
                 )
-                for x in eList:
-                    temp = x
-                    # getting the building names
-                    buildingList += list(
-                        dict.fromkeys(
-                            models.Building.objects.filter(
-                                building_id=temp
-                            ).values_list("building_name", flat=True)
-                        )
-                    )
-                # finding all of the users with the buildings added and effected
-                for x in eList:
-                    usersAffected = models.Excursion.objects.filter(building_id_id = x).exclude(
-                    report_id__isnull=False
-                    ).values_list("user_id", flat=True)
-                usersAffected = list(dict.fromkeys(usersAffected))
+                #looping over the buildings impacted
+                for x in range(len(buildingsImpacted)):
+                    #find the days from the days_selected
+                    daysImpacted = list(dict.fromkeys(models.Excursion.objects.filter(report_id_id=rId,
+                    building_id_id = buildingsImpacted[x]).exclude(
+                    report_id__isnull=True
+                    ).values_list("days_selected", flat=True)))
+
+                    #loop to single out the users impacted on day and in that building
+                    for y in daysImpacted[0]:
+                        usersAffected += models.Excursion.objects.filter(building_id_id = buildingsImpacted[x],
+                        days_selected__contains = y
+                        ).exclude(
+                        report_id__isnull=False
+                        ).values_list("user_id", flat=True)
+                    usersAffected = list(dict.fromkeys(usersAffected))
+
                 # grabbing their emails
                 for x in usersAffected:
-                    temp = x
                     emailList += list(
-                        models.CustomUser.objects.filter(id=temp).values_list(
+                        models.CustomUser.objects.filter(id=x).values_list(
                             "email", flat=True
                         )
                     )
@@ -329,3 +391,10 @@ def passwordChangeDone(request, *args, **kwargs):
         template_name="Hydroxychloroquine/passwordChangeDone.html"
     )
     return customRender(request, *args, **kwargs)
+
+#from https://www.geeksforgeeks.org/python-program-to-find-day-of-the-week-for-a-given-date/
+def findDay(date):
+    date = str(date)
+    year, month, day = (int(i) for i in date.split('-'))
+    born = datetime.date(year, month, day)
+    return born.strftime("%A")

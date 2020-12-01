@@ -2,16 +2,9 @@
 {% load static %}
 {% block content %}
 <body>
-    {% if success %}
     <h2>We regret to inform you that based on the buildings you signed up for, you may have been exposed to covid.</h2>
     <div id="formFooter">
         <a class="underlineHover" href="https://clia.vetview.vet.uga.edu/">Click here to sign up for uga survillance testing</a>
     </div>
-    {% else %}
-    <h2>Uh oh, it looks like there was a problem verifying your email. Please try again! </h2>
-    <div id="formFooter">
-        <a class="underlineHover" href="{% url 'Hydroxychloroquine-signup' %}"">Click here to return to the signup page</a>
-    </div>
-    {% endif %}
 </body>
 {% endblock content %}
