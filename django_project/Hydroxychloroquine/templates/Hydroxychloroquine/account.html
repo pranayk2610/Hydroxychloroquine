@@ -34,13 +34,13 @@
   <div class="container" id="accountInfo">
     <div class="col justify-content-center">
       <div class="row justify-content-center">
-          <h1>My Account</h1>
-      </div>
+          <h1 style="padding-top: 10px;">My Account</h1>
+      </div><hr>
       <div class="row">
-          <div class="col-4 justify-content-center">
+          <div class="col-4 justify-content-center" style="padding: 15px; border: 2px solid rgba(0, 0, 0, 0); border-radius: 10px;">
               <div class="row justify-content-center">
                   <h2>Personal Information</h2>
-              </div>
+              </div><br>
               <div class="row justify-content-center">
                   <ul class="list-group">
                     <li class="list-group-item">Name</li>
@@ -60,22 +60,41 @@
                   Password</a>
               </div>
           </div>
-          <div class="col-8 justify-content-center">
+          <div class="col-8 justify-content-center" style="padding: 15px; border: 2px solid rgba(0, 0, 0, .5); border-radius: 10px;">
               <div class="row justify-content-center">
                   <h2>Selected Buildings</h2>
-              </div>
+              </div><hr>
               <div class="row justify-content-center">
-                  <div class="col justify-content-center overflow-auto" style="max-height: 200px;">
+                  <div class="col justify-content-center overflow-auto" style="max-height: 300px;">
                       <ul class="list-group">
                           <div class="row">
-                             <div class="col-2">
+                             <div class="col-2" style="max-width: 16%;">
                                  <h5>Building</h5>
                              </div>
+                             <div class="col-2" style="max-width:6%;">
+								 <p>SU</p>
+							 </div>
+							 <div class="col-2" style="max-width:6%;">
+								<p>M</p>
+							</div>
+							<div class="col-2" style="max-width:5%;">
+								<p>T</p>
+							</div>
+							<div class="col-2" style="max-width:5.5%;">
+								<p>W</p>
+							</div>
+							<div class="col-2" style="max-width:6%;">
+								<p>TH</p>
+							</div>
+							<div class="col-2" style="max-width:5%;">
+								<p>F</p>
+							</div>
+							<div class="col-2" style="max-width:7%;">
+								<p>SA</p>
+							</div>
+                            
                              <div class="col-2">
-                                 <h5>Start Time</h5>
-                             </div>
-                             <div class="col-2">
-                                 <h5>End Time</h5>
+                                 <h5>Times</h5>
                              </div>
                              <div class="col-2">
 
@@ -83,7 +102,7 @@
                           </div>
                           {% for excur in users_excursions %}
                           <div class="row align-items-center" id="cur_excursion{{ excur.id }}">
-                              <div class="col-2"> {{ excur.building_id}} </div>
+                              <div class="col-2" style="margin-right: 20px; padding: 0px; text-align: center;font-weight: 500;"> {{ excur.building_id}} </div>
 
                               <!-- Days -->
                               {% with '1 2 3 4 5 6 7' as days %}
@@ -91,14 +110,15 @@
                                 <div class="col">
                                   <input name="{{ excur.id }}_{{ day }}" id="update_days{{ excur.id }}_{{ day }}" class="form-check-input"
                                     type="checkbox" value="{{ day }}" {% if day in excur.days_selected %} checked {% endif %}>
-                                  <!-- <label for="update_days{{ excur.id }}_{{ day }}" class="form-check-label">{{ day }}</label> -->
+                                   <!--<label for="update_days{{ excur.id }}_{{ day }}" class="form-check-label">{{ day }}</label> -->
                                 </div>
                                 {% endfor %}
                               {% endwith %}
 
                               <!-- Times -->
                               <!-- <label for="update_times{{ excur.id }}_start">From:</label> -->
-                              <div class="col">
+                              <div class="col" style="margin:1px; padding: 1px;">
+                                <label><h7>Start Time</h7></label>
                                 <select name="{{ excur.id }}" class="" id="update_times{{ excur.id }}_start" onchange="update_times{{ excur.id }}_start_fun(this)">
                                   {% for time in time_choices %}
                                     <option value="{{ time.0 }}" {% if time.1 == excur.start_time %} selected {% endif %}>{{ time.0 }}</option>
@@ -106,7 +126,8 @@
                                 </select>
                               </div>
                               <!-- <label for="update_times{{ excur.id }}_end">To:</label> -->
-                              <div class="col">
+                              <div class="col" style="margin:1px; padding: 1px;">
+                                <label><h7>End Time</h7></label>
                                 <select name="{{ excur.id }}" class="" id="update_times{{ excur.id }}_end" onchange="update_times{{ excur.id }}_end_fun(this)">
                                   {% for time in time_choices %}
                                     <option value="{{ time.0 }}" {% if time.1 == excur.end_time %} selected {% endif %}>{{ time.0 }}</option>
@@ -117,9 +138,9 @@
                               <!-- <div class="col-2"> {{ excur.end_time }} </div> -->
                               <div class="col-2">
                                  <input type="button" class="btn btn-danger" id="remove_building{{ excur.id }}"
-                                   name="{{excur.id}}" value="Delete" style="margin:10px;" />
+                                   name="{{excur.id}}" value="Delete" style="vertical-align: auto;" />
                               </div>
-                          </div>
+                          </div><br style="margin: 10px;">
                           {% endfor %}
                       </ul>
                   </div>

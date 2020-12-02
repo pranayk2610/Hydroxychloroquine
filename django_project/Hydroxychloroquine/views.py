@@ -109,7 +109,7 @@ def data(request):
         tempDict = {}
         tempDict["TestDate"]=r[x].date_of_test.strftime("%m/%d/%Y")
         userType = models.CustomUser.objects.values_list("user_type", flat = True).filter(id = r[x].user_id_id)
-        if userType[0] == 'STU':
+        if r[x].user_type == '1':
             tempDict["Position"]= "Student"
         else:
             tempDict["Position"]= "Staff"
@@ -203,6 +203,7 @@ def reportTest(request):
                 user_id=request.user,
                 date_of_test=report_form.cleaned_data["date_of_test"],
                 date_last_on_campus=report_form.cleaned_data["date_last_on_campus"],
+                user_type = report_form.cleaned_data['user_type'],
             )
             print("  ***report object made***  excursion =",r)
 

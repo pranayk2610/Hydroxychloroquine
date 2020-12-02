@@ -38,7 +38,7 @@ class Report(models.Model):
     date_of_test = models.DateField() # changed from DateTimeField to DateField
     date_last_on_campus = models.DateField() # changed from DateTimeField to DateField
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    user_type = models.CharField(max_length = 3, default = 'STU')
     def __str__(self):
         return "%s %s %s" % (self.date_of_test, self.date_last_on_campus, self.user_id)
 
