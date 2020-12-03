@@ -7,8 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 
 
-
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     class UserType(models.TextChoices):
         STUDENT: "STU"

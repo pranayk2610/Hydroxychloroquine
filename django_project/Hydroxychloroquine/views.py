@@ -22,7 +22,6 @@ from . import utils
 from django.utils.dateparse import parse_time
 
 
-
 # for display purposes
 max_num_excursions = 3
 
