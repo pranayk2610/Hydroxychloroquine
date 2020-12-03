@@ -346,7 +346,7 @@ def login(request, *args, **kwargs):
     )
     return customRender(request, *args, **kwargs)
 
-def login(request, *args, **kwargs):
+def loginFirst(request, *args, **kwargs):
     print(request.method)
     if request.method == "POST":
         if not request.POST.get("RememberMe", None):
