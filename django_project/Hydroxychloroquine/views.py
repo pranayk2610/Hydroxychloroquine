@@ -96,7 +96,7 @@ def home(request):
             return redirect("Hydroxychloroquine-account")
     except:
         pass
-    context = {"title": "home",}
+    context = {"title": "Home",}
     return render(request, "Hydroxychloroquine/home.html", context)
 
 def data(request):
@@ -129,7 +129,7 @@ def data(request):
         tempDict["BuildingsImpacted"]= buildingString
         reports[str(r[x].id)] = tempDict
     context = {
-        "title": "data",
+        "title": "Data",
         "recent_reports": reports,
     }
     return render(request, "Hydroxychloroquine/data.html", context)
@@ -177,7 +177,7 @@ def account(request):
 
     users_excursions = models.Excursion.objects.filter(user_id=request.user).filter(report_id=None)
     context = {
-        "title": "account",
+        "title": "Account",
         "loop_max": len(formset_SelectBuilding) - 1,
         "form_userchange": form_userchange,
         "formset_SelectBuilding": formset_SelectBuilding,
@@ -279,7 +279,7 @@ def reportTest(request):
         report_form = forms.ReportTestForm()
         formset_SelectBuilding = SelectBuildingFormSet(prefix="excursions")
     context = {
-        "title": "account",
+        "title": "Report Test",
         "loop_max": len(formset_SelectBuilding) - 1,
         "report_form": report_form,
         "formset_SelectBuilding": formset_SelectBuilding,
@@ -312,7 +312,7 @@ def signup(request):
 
 def forgotPassword(request):
     context = {
-        "title": "forgotPassword",
+        "title": "Forgot Password",
     }
     return render(request, "Hydroxychloroquine/forgotPassword.html", context)
 
