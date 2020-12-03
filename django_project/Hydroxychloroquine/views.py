@@ -18,7 +18,7 @@ from .testingVars import test_buildings, test_building_names, test_reports
 from django.forms import formset_factory
 from . import forms
 from . import models
-from .utils import convert_to_24_hour_time
+from . import utils
 from django.utils.dateparse import parse_time
 
 
@@ -159,8 +159,8 @@ def account(request):
                 e = models.Excursion.objects.create(
                     user_id = request.user,
                     building_id = form.cleaned_data['building_id'],
-                    start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
-                    end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                    start_time = utils.convert_to_24_hour_time(form.cleaned_data['start_time']),
+                    end_time = utils.convert_to_24_hour_time(form.cleaned_data['end_time']),
                     days_selected = "".join(form.cleaned_data['days_selected']),
                     )
                 print("  ***excursion object made***  excursion =",e)
@@ -174,7 +174,7 @@ def account(request):
         for ap in ("am", "pm")
         for h in ([12] + list(range(1, 12)))
     ]
-    time_choices = [(t, parse_time(convert_to_24_hour_time(t))) for i, t in enumerate(times, start=1)]
+    time_choices = [(t, parse_time(utils.convert_to_24_hour_time(t))) for i, t in enumerate(times, start=1)]
 
     users_excursions = models.Excursion.objects.filter(user_id=request.user).filter(report_id=None)
     context = {
@@ -214,8 +214,8 @@ def reportTest(request):
                         report_id = r,
                         user_id = request.user,
                         building_id = form.cleaned_data['building_id'],
-                        start_time = convert_to_24_hour_time(form.cleaned_data['start_time']),
-                        end_time = convert_to_24_hour_time(form.cleaned_data['end_time']),
+                        start_time = utils.convert_to_24_hour_time(form.cleaned_data['start_time']),
+                        end_time = utils.convert_to_24_hour_time(form.cleaned_data['end_time']),
                         days_selected = "".join(form.cleaned_data['days_selected']),
                         )
                     print("  ***excursion object made***  excursion =",e)
@@ -395,10 +395,3 @@ def passwordChangeDone(request, *args, **kwargs):
         template_name="Hydroxychloroquine/passwordChangeDone.html"
     )
     return customRender(request, *args, **kwargs)
-
-#from https://www.geeksforgeeks.org/python-program-to-find-day-of-the-week-for-a-given-date/
-def findDay(date):
-    date = str(date)
-    year, month, day = (int(i) for i in date.split('-'))
-    born = datetime.date(year, month, day)
-    return born.strftime("%A")
