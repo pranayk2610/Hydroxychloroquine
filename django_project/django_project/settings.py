@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_email_verification",
     "mathfilters",
-    "django_extensions",
 ]
 
 MIDDLEWARE = [
