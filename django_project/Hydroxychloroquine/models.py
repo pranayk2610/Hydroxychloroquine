@@ -7,9 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 
 
-class Role(models.Model):
-    role_id = models.IntegerField(primary_key=True)
-    role_name = models.CharField(max_length=128)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -28,8 +25,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # add UserType to this
     user_type = models.CharField(max_length=3, choices=UserType.choices, default="STU")
 
-    roles = models.ManyToManyField(Role)
-
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -43,7 +38,7 @@ class Report(models.Model):
     date_of_test = models.DateField() # changed from DateTimeField to DateField
     date_last_on_campus = models.DateField() # changed from DateTimeField to DateField
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    user_type = models.CharField(max_length = 3, default = 'STU')
     def __str__(self):
         return "%s %s %s" % (self.date_of_test, self.date_last_on_campus, self.user_id)
 

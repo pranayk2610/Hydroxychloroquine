@@ -42,37 +42,28 @@
 
             <div class="form-group top">
                 <label for="id_date_of_test">{{ report_form.date_of_test.label_tag }}</label>
-                <input name="date_of_test" type="date" data-provide="datepicker" id="id_date_of_test" aria-describedby="dateClarification" class="form-control" required value="2020-11-07">
+                <input name="date_of_test" type="date" data-provide="datepicker" id="id_date_of_test" aria-describedby="dateClarification" class="form-control" required value="2020-08-01">
                 <small id="dateClarification" class="form-text text-muted">This should be the date the test was administered on, not when you recieved the result.</small>
             </div>
 
             <div class="form-group top">
                 <label for="id_date_of_test">{{ report_form.date_last_on_campus.label_tag }}</label>
-                <input name="date_last_on_campus" type="date" data-provide="datepicker" id="id_date_last_on_campus" class="form-control" required value="2020-11-07">
+                <input name="date_last_on_campus" type="date" data-provide="datepicker" id="id_date_last_on_campus" class="form-control" required value="2020-08-01">
             </div>
-            <!--
+            
             <div class="form-group top">
                 <label for="id_user_type">Which category do you fall in?</label>
                 <div class="form-group col">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="user_type" required id="id_user_type_0" value="1" checked>
-                        <label class="form-check-label" for="id_user_type_0">Student</label>
+                        <label class="form-check-label" for="id_user_type_0">{{report_form.user_type.field.choices.0.1}}</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" required id="id_user_type_1" value="2">
-                        <label class="form-check-label" for="id_user_type_1">Faculty</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" required id="id_user_type_2" value="3">
-                        <label class="form-check-label" for="id_user_type_2">Staff</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="user_type" required id="id_user_type_3" value="4">
-                        <label class="form-check-label" for="id_user_type_3">Other member of the Athens community</label>
+                        <input class="form-check-input" type="radio" name="user_type" required id="id_user_type_2" value="2">
+                        <label class="form-check-label" for="id_user_type_2">{{report_form.user_type.field.choices.1.1}}</label>
                     </div>
                 </div>
             </div>
--->
             <div class="form-group col top">
               <p>Select which buildings you have been in during the last 3 days and times you were there</p>
               {% include "Hydroxychloroquine/selectBuildings.html" %}
