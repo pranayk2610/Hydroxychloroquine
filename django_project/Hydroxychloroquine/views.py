@@ -300,7 +300,7 @@ def signup(request):
             user.is_active = False
             user.save()
             sendConfirm(user)
-            return redirect("Hydroxychloroquine-login")
+            return redirect("Hydroxychloroquine-loginFirst")
         else:
             for k in form.errors.get_json_data():
                 v = form.errors.get_json_data()[k][0]["message"]
@@ -341,6 +341,33 @@ def login(request, *args, **kwargs):
 
     customRender = auth_views.LoginView.as_view(
         template_name="Hydroxychloroquine/login.html",
+        redirect_authenticated_user=True,
+        authentication_form=forms.CustomAuthenticationForm,
+    )
+    return customRender(request, *args, **kwargs)
+
+def login(request, *args, **kwargs):
+    print(request.method)
+    if request.method == "POST":
+        if not request.POST.get("RememberMe", None):
+            request.session.set_expiry(0)
+
+    # debug print to terminal start
+    # if request.method == "POST":
+    #     if not request.POST.get("RememberMe", None):
+    #         print("RememberMe was unchecked")
+    #     else:
+    #         print("RememberMe was checked")
+    #     print(request.POST.get("RememberMe"))
+    #     print("Login expires in {} seconds".format(request.session.get_expiry_age()))
+    #     print(
+    #         "Login expires at browser close:",
+    #         request.session.get_expire_at_browser_close(),
+    #     )
+    # debug print to terminal end
+
+    customRender = auth_views.LoginView.as_view(
+        template_name="Hydroxychloroquine/loginFirst.html",
         redirect_authenticated_user=True,
         authentication_form=forms.CustomAuthenticationForm,
     )
