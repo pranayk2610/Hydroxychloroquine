@@ -15,6 +15,7 @@ urlpatterns = [
     path("reportTest/", views.reportTest, name="Hydroxychloroquine-reportTest"),
     path("signup/", views.signup, name="Hydroxychloroquine-signup"),
     path("login/", views.login, name="Hydroxychloroquine-login"),
+    path("loginFirst/", views.loginFirst, name="Hydroxychloroquine-loginFirst"),
     path("logout/", views.logout, name="Hydroxychloroquine-logout"),
     path(
         "passwordReset/",
